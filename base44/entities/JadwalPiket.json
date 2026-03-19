@@ -1,0 +1,31 @@
+{
+  "name": "JadwalPiket",
+  "schema": {
+    "hari": {
+      "type": "string",
+      "required": true,
+      "enum": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+      "label": "Hari"
+    },
+    "shift": {
+      "type": "string",
+      "required": true,
+      "enum": ["PAGI", "SIANG"],
+      "label": "Shift"
+    },
+    "guruId": {
+      "type": "relation",
+      "relation": "Guru",
+      "required": true,
+      "label": "Guru Piket"
+    }
+  },
+  "indexes": ["hari"],
+  "unique": [["hari", "shift"]],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

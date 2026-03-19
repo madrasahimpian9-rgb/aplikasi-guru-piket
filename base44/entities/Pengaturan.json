@@ -1,0 +1,52 @@
+{
+  "name": "Pengaturan",
+  "schema": {
+    "namaSekolah": {
+      "type": "string",
+      "required": true,
+      "label": "Nama Sekolah"
+    },
+    "alamatSekolah": {
+      "type": "string",
+      "required": false,
+      "label": "Alamat Sekolah"
+    },
+    "telepon": {
+      "type": "string",
+      "required": false,
+      "label": "Telepon"
+    },
+    "email": {
+      "type": "string",
+      "required": false,
+      "label": "Email"
+    },
+    "kepalaSekolah": {
+      "type": "string",
+      "required": false,
+      "label": "Kepala Sekolah"
+    },
+    "semester": {
+      "type": "string",
+      "required": true,
+      "label": "Semester"
+    },
+    "tahunAjaran": {
+      "type": "string",
+      "required": true,
+      "label": "Tahun Ajaran"
+    },
+    "logo": {
+      "type": "string",
+      "required": false,
+      "label": "Logo (Base64)"
+    }
+  },
+  "indexes": [],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

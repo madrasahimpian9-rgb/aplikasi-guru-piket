@@ -1,0 +1,8 @@
+{
+  "name": "aplikasi-guru-piket",
+  "displayName": "Aplikasi Guru Piket",
+  "description": "Aplikasi untuk mengelola kehadiran guru piket dan siswa di MTs Da'arul Ma'arif Pasawahan",
+  "version": "1.0.0",
+  "entitiesDir": "./base44/entities",
+  "functionsDir": "./base44/functions"
+}

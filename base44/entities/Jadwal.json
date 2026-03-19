@@ -1,0 +1,52 @@
+{
+  "name": "Jadwal",
+  "schema": {
+    "hari": {
+      "type": "string",
+      "required": true,
+      "enum": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+      "label": "Hari"
+    },
+    "jamKe": {
+      "type": "number",
+      "required": true,
+      "label": "Jam Ke"
+    },
+    "waktuMulai": {
+      "type": "string",
+      "required": true,
+      "label": "Waktu Mulai"
+    },
+    "waktuSelesai": {
+      "type": "string",
+      "required": true,
+      "label": "Waktu Selesai"
+    },
+    "kelasId": {
+      "type": "relation",
+      "relation": "Kelas",
+      "required": true,
+      "label": "Kelas"
+    },
+    "mapelId": {
+      "type": "relation",
+      "relation": "MataPelajaran",
+      "required": false,
+      "label": "Mata Pelajaran"
+    },
+    "guruId": {
+      "type": "relation",
+      "relation": "Guru",
+      "required": true,
+      "label": "Guru"
+    }
+  },
+  "indexes": ["hari", "guruId", "kelasId"],
+  "unique": [["hari", "jamKe", "kelasId"]],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

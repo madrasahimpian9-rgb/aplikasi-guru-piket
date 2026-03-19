@@ -1,0 +1,23 @@
+{
+  "name": "MataPelajaran",
+  "schema": {
+    "kode": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "label": "Kode Mata Pelajaran"
+    },
+    "nama": {
+      "type": "string",
+      "required": true,
+      "label": "Nama Mata Pelajaran"
+    }
+  },
+  "indexes": [],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

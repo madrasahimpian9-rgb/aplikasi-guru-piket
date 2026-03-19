@@ -1,0 +1,41 @@
+{
+  "name": "KehadiranGuru",
+  "schema": {
+    "tanggal": {
+      "type": "date",
+      "required": true,
+      "label": "Tanggal"
+    },
+    "jadwalId": {
+      "type": "relation",
+      "relation": "Jadwal",
+      "required": true,
+      "label": "Jadwal"
+    },
+    "guruId": {
+      "type": "relation",
+      "relation": "Guru",
+      "required": true,
+      "label": "Guru"
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum": ["HADIR", "TIDAK_HADIR"],
+      "label": "Status Kehadiran"
+    },
+    "keterangan": {
+      "type": "string",
+      "required": false,
+      "label": "Keterangan"
+    }
+  },
+  "indexes": ["tanggal", "guruId", "status"],
+  "unique": [["tanggal", "jadwalId"]],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

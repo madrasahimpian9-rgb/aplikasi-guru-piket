@@ -1,0 +1,41 @@
+{
+  "name": "KehadiranSiswa",
+  "schema": {
+    "tanggal": {
+      "type": "date",
+      "required": true,
+      "label": "Tanggal"
+    },
+    "siswaId": {
+      "type": "relation",
+      "relation": "Siswa",
+      "required": true,
+      "label": "Siswa"
+    },
+    "kelasId": {
+      "type": "relation",
+      "relation": "Kelas",
+      "required": true,
+      "label": "Kelas"
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum": ["HADIR", "SAKIT", "IZIN", "ALPA"],
+      "label": "Status Kehadiran"
+    },
+    "keterangan": {
+      "type": "string",
+      "required": false,
+      "label": "Keterangan"
+    }
+  },
+  "indexes": ["tanggal", "kelasId", "status"],
+  "unique": [["tanggal", "siswaId"]],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

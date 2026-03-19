@@ -1,0 +1,29 @@
+{
+  "name": "Kelas",
+  "schema": {
+    "nama": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "label": "Nama Kelas"
+    },
+    "tingkat": {
+      "type": "number",
+      "required": true,
+      "label": "Tingkat (7/8/9)"
+    },
+    "shift": {
+      "type": "string",
+      "required": true,
+      "enum": ["PAGI", "SIANG"],
+      "label": "Shift"
+    }
+  },
+  "indexes": ["shift"],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

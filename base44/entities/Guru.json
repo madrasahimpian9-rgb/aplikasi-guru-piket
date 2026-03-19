@@ -1,0 +1,28 @@
+{
+  "name": "Guru",
+  "schema": {
+    "kode": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "label": "Kode Guru"
+    },
+    "nama": {
+      "type": "string",
+      "required": true,
+      "label": "Nama Lengkap"
+    },
+    "gelar": {
+      "type": "string",
+      "required": false,
+      "label": "Gelar"
+    }
+  },
+  "indexes": ["nama"],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

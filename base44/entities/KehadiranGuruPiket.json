@@ -1,0 +1,41 @@
+{
+  "name": "KehadiranGuruPiket",
+  "schema": {
+    "tanggal": {
+      "type": "date",
+      "required": true,
+      "label": "Tanggal"
+    },
+    "guruId": {
+      "type": "relation",
+      "relation": "Guru",
+      "required": true,
+      "label": "Guru"
+    },
+    "shift": {
+      "type": "string",
+      "required": true,
+      "enum": ["PAGI", "SIANG"],
+      "label": "Shift"
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum": ["HADIR", "TIDAK_HADIR"],
+      "label": "Status Kehadiran"
+    },
+    "keterangan": {
+      "type": "string",
+      "required": false,
+      "label": "Keterangan"
+    }
+  },
+  "indexes": ["tanggal", "shift"],
+  "unique": [["tanggal", "guruId", "shift"]],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}

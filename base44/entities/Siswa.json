@@ -1,0 +1,23 @@
+{
+  "name": "Siswa",
+  "schema": {
+    "nama": {
+      "type": "string",
+      "required": true,
+      "label": "Nama Siswa"
+    },
+    "kelasId": {
+      "type": "relation",
+      "relation": "Kelas",
+      "required": true,
+      "label": "Kelas"
+    }
+  },
+  "indexes": ["kelasId", "nama"],
+  "permissions": {
+    "read": "public",
+    "create": "authenticated",
+    "update": "authenticated",
+    "delete": "authenticated"
+  }
+}
