@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "This is a **teacher monitoring schedule table** (titled *DAFTAR HADIR JAM TATAP MUKA PNS, GTY, GTT*) for **MTS Da'arul Ma'arif** (a middle school) for the **2025/2026 academic year, Semester I**. It records teacher attendance and monitoring duties for a specific date: *Senin, 27/10/25* (Monday, October 27, 2025), during the **morning session** (*Pagi*).  \n\n\n### Columns:  \n1. **No**: Row number (sequential, starting from 1).  \n2. **Nama Guru**: Teacher’s name (lists 7 teachers: Siti Nuraini, Tika Mey Senby, Mahmudin, Eva Novianti, M. Tontowi, Siti Mariana Ulfa, KH. M. Sulaeman).  \n3. **Jam ke (1–10)**: 10 columns representing *class periods* (or “hours”) in the school day (labeled 1 to 10). Each cell shows the teacher’s duty:  \n   - **Letters (A, B, C, D)**: Likely denote *class groups* (e.g., Class A, B, C, D) the teacher monitors.  \n   - **“–”**: Indicates the teacher has no duty during that period.  \n4. **Ket (H, TH)**: Two sub-columns for notes:  \n   - *H*: Likely “Hadir” (Present) or a related status.  \n   - *TH*: Likely “Tidak Hadir” (Absent) or a related status.  \n\n\n### Rows:  \n- **Header Row**: Contains the table title, school name, academic year, semester, date, and session.  \n- **Teacher Rows**: 7 rows (one per teacher) with their name and duty assignments across the 10 periods.  \n- **Blank Rows**: Additional rows (below the 7 teachers) for future entries or additional teachers.  \n\n\n### Information Shown:  \n- **Title/Context**: The table is for monitoring *face-to-face* (tatap muka) duties of civil servants (PNS), contract teachers (GTY), and other staff (GTT) at MTS Da'arul Ma'arif.  \n- **Date/Session**: Specific date (*27/10/25*) and morning session (*Pagi*).  \n- **Teacher Duties**: For each teacher, their assigned class group (A–D) or “no duty” (–) across 10 periods. For example:  \n  - *Siti Nuraini*: Periods 2 (A), 3 (A), 7 (C), 8 (C); others are “–”.  \n  - *Tika Mey Senby*: Periods 2 (B), 3 (B), 4 (C), 5 (C); others are “–”.  \n- **Notes Columns**: Empty in the provided image (likely for marking attendance or additional comments).  \n\n\nThis table organizes teacher monitoring duties to track who is responsible for which class group during each period of the school day.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1773868808,
+  "id": "202603190519428819dce7a9284b18",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "202603190519428819dce7a9284b18",
+  "usage": {
+    "completion_tokens": 671,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2485,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 3156
+  }
+}

@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Pengaturan Sekolah
+model Pengaturan {
+  id              String @id @default(cuid())
+  namaSekolah     String
+  alamatSekolah   String?
+  telepon         String?
+  email           String?
+  kepalaSekolah   String?
+  semester        String // "Ganjil" atau "Genap"
+  tahunAjaran     String // "2025/2026"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Data Guru
+model Guru {
+  id            String @id @default(cuid())
+  kode          String @unique
+  nama          String
+  gelar         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  jadwal        Jadwal[]
+  kehadiranGuru KehadiranGuru[]
+}
+
+// Mata Pelajaran
+model MataPelajaran {
+  id        String @id @default(cuid())
+  kode      String @unique
+  nama      String
+  jadwal    Jadwal[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Kelas
+model Kelas {
+  id              String @id @default(cuid())
+  nama            String @unique // "7A", "7B", "9A", etc.
+  tingkat         Int // 7, 8, atau 9
+  shift           String // "PAGI" atau "SIANG"
+  siswa           Siswa[]
+  jadwal          Jadwal[]
+  kehadiranSiswa  KehadiranSiswa[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Siswa
+model Siswa {
+  id              String @id @default(cuid())
+  nama            String
+  kelasId         String
+  kelas           Kelas  @relation(fields: [kelasId], references: [id])
+  kehadiranSiswa  KehadiranSiswa[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Jadwal Pelajaran
+model Jadwal {
+  id            String @id @default(cuid())
+  hari          String // "Senin", "Selasa", etc.
+  jamKe         Int // 1, 2, 3, etc.
+  waktuMulai    String // "07:00"
+  waktuSelesai  String // "07:30"
+  kelasId       String
+  kelas         Kelas @relation(fields: [kelasId], references: [id])
+  mapelId       String?
+  mapel         MataPelajaran? @relation(fields: [mapelId], references: [id])
+  guruId        String
+  guru          Guru @relation(fields: [guruId], references: [id])
+  kehadiranGuru KehadiranGuru[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@unique([hari, jamKe, kelasId])
+}
+
+// Kehadiran Guru Mengajar
+model KehadiranGuru {
+  id          String @id @default(cuid())
+  tanggal     DateTime
+  jadwalId    String
+  jadwal      Jadwal @relation(fields: [jadwalId], references: [id])
+  guruId      String
+  guru        Guru @relation(fields: [guruId], references: [id])
+  status      String // "HADIR", "TIDAK_HADIR"
+  keterangan  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([tanggal, jadwalId])
+}
+
+// Kehadiran Siswa
+model KehadiranSiswa {
+  id          String @id @default(cuid())
+  tanggal     DateTime
+  siswaId     String
+  siswa       Siswa @relation(fields: [siswaId], references: [id])
+  kelasId     String
+  kelas       Kelas @relation(fields: [kelasId], references: [id])
+  status      String // "HADIR", "SAKIT", "IZIN", "ALFA", "KABUR"
+  keterangan  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([tanggal, siswaId])
+}

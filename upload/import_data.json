@@ -1,0 +1,3486 @@
+{
+  "teachers": [
+    "Ahmad Satibi, S.Pd",
+    "Dede Rosmawati, S.Pd.I",
+    "Eva Novianti, S.Pd",
+    "Idham Maulana, S.Pd",
+    "Ima Mulyanti, S.Pd",
+    "Iman Lukman Nul Hakim, S.Pd",
+    "Irma Anggraeni, S.Pd",
+    "KH. M. Sulaeman",
+    "M. Arief Kharisyahbudi, S.Pd",
+    "M. Lutfi Kamaludin, S.H",
+    "M. Rifqi Hidayat, S.Psi",
+    "Mahmudin, S.Pd.I",
+    "Muhamad Tontowi, S.Pd.I",
+    "Nurbaiti Yulistiana, S.Pd",
+    "Saeful Anwar, S.Pd",
+    "Sarif Hidayat, S.Pd",
+    "Siti Mariam Ulfah, S.Pd.I",
+    "Siti Nuraeni, S.E",
+    "Siti Nurpaijah, S.Pd",
+    "Syifa Nurfuadah, S.Pd",
+    "Tika Mei Sendy, S.Pd",
+    "Wati Sulistyawati, S.Pd"
+  ],
+  "classes": [
+    "7A",
+    "7B",
+    "8A",
+    "8B",
+    "8C",
+    "9A",
+    "9B",
+    "9C",
+    "9D"
+  ],
+  "schedules": [
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9C",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 9,
+      "waktuMulai": "12:05",
+      "waktuSelesai": "12:45",
+      "kelas": "9C",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9D",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 9,
+      "waktuMulai": "12:05",
+      "waktuSelesai": "12:45",
+      "kelas": "9A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 9,
+      "waktuMulai": "12:05",
+      "waktuSelesai": "12:45",
+      "kelas": "9B",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9B",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9B",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9D",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 9,
+      "waktuMulai": "12:05",
+      "waktuSelesai": "12:45",
+      "kelas": "9D",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9A",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 9,
+      "waktuMulai": "12:05",
+      "waktuSelesai": "12:45",
+      "kelas": "9C",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9D",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9D",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9C",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9D",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9C",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9C",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9D",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9D",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9D",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9C",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9C",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9D",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9D",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9C",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Muhamad Tontowi, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9D",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Wati Sulistyawati, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "KH. M. Sulaeman",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "11:25",
+      "waktuSelesai": "12:05",
+      "kelas": "9A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9A",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9C",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9D",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9C",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9C",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9B",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9B",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9C",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9C",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9C",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9D",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "06:30",
+      "waktuSelesai": "07:10",
+      "kelas": "9D",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9D",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "07:50",
+      "waktuSelesai": "08:30",
+      "kelas": "9A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "07:10",
+      "waktuSelesai": "07:50",
+      "kelas": "9C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9D",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "08:30",
+      "waktuSelesai": "09:10",
+      "kelas": "9C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 5,
+      "waktuMulai": "09:25",
+      "waktuSelesai": "10:05",
+      "kelas": "9D",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 6,
+      "waktuMulai": "10:05",
+      "waktuSelesai": "10:45",
+      "kelas": "9D",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 7,
+      "waktuMulai": "10:45",
+      "waktuSelesai": "11:25",
+      "kelas": "9D",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "PAGI"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "Eva Novianti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "7B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8C",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8C",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Senin",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "7A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8C",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8C",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8C",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "7B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8A",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7B",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Selasa",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "7A",
+      "guru": "Siti Mariam Ulfah, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7B",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7B",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "Siti Nuraeni, S.E",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "M. Rifqi Hidayat, S.Psi",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "M. Rifqi Hidayat, S.Psi",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8A",
+      "guru": "M. Rifqi Hidayat, S.Psi",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8A",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8C",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8C",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Rabu",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8B",
+      "guru": "Tika Mei Sendy, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7B",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8C",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8C",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8A",
+      "guru": "Syifa Nurfuadah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Nurbaiti Yulistiana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "7A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "M. Rifqi Hidayat, S.Psi",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "M. Rifqi Hidayat, S.Psi",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8B",
+      "guru": "Iman Lukman Nul Hakim, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7A",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7A",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 7,
+      "waktuMulai": "16:25",
+      "waktuSelesai": "16:55",
+      "kelas": "8C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Kamis",
+      "jamKe": 8,
+      "waktuMulai": "16:55",
+      "waktuSelesai": "17:25",
+      "kelas": "8C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8A",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8B",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8B",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7A",
+      "guru": "Irma Anggraeni, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7A",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "7B",
+      "guru": "Ahmad Satibi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "7B",
+      "guru": "Ima Mulyanti, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 5,
+      "waktuMulai": "15:15",
+      "waktuSelesai": "15:50",
+      "kelas": "8C",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Jumat",
+      "jamKe": 6,
+      "waktuMulai": "15:50",
+      "waktuSelesai": "16:25",
+      "kelas": "8C",
+      "guru": "M. Lutfi Kamaludin, S.H",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7A",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7B",
+      "guru": "Sarif Hidayat, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "7B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "7B",
+      "guru": "Siti Nurpaijah, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8A",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8B",
+      "guru": "Mahmudin, S.Pd.I",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8B",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8B",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8C",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8C",
+      "guru": "Saeful Anwar, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 1,
+      "waktuMulai": "12:40",
+      "waktuSelesai": "13:15",
+      "kelas": "8C",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "8A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "8A",
+      "guru": "M. Arief Kharisyahbudi, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 2,
+      "waktuMulai": "13:15",
+      "waktuSelesai": "13:50",
+      "kelas": "8C",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 4,
+      "waktuMulai": "14:25",
+      "waktuSelesai": "15:00",
+      "kelas": "7A",
+      "guru": "Idham Maulana, S.Pd",
+      "shift": "SIANG"
+    },
+    {
+      "hari": "Sabtu",
+      "jamKe": 3,
+      "waktuMulai": "13:50",
+      "waktuSelesai": "14:25",
+      "kelas": "7A",
+      "guru": "Dede Rosmawati, S.Pd.I",
+      "shift": "SIANG"
+    }
+  ]
+}
