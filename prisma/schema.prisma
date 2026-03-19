@@ -1,123 +1,161 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
-// Pengaturan Sekolah
-model Pengaturan {
-  id              String @id @default(cuid())
-  namaSekolah     String
-  alamatSekolah   String?
-  telepon         String?
-  email           String?
-  kepalaSekolah   String?
-  semester        String // "Ganjil" atau "Genap"
-  tahunAjaran     String // "2025/2026"
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
-// Data Guru
 model Guru {
-  id            String @id @default(cuid())
-  kode          String @unique
-  nama          String
-  gelar         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  jadwal        Jadwal[]
-  kehadiranGuru KehadiranGuru[]
+  id                 String               @id @default(cuid())
+  kode               String               @unique
+  nama               String
+  gelar              String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Jadwal             Jadwal[]
+  JadwalPiket        JadwalPiket[]
+  KehadiranGuru      KehadiranGuru[]
+  KehadiranGuruPiket KehadiranGuruPiket[]
+
+  @@index([nama])
 }
 
-// Mata Pelajaran
-model MataPelajaran {
-  id        String @id @default(cuid())
-  kode      String @unique
-  nama      String
-  jadwal    Jadwal[]
+model Jadwal {
+  id            String          @id @default(cuid())
+  hari          String
+  jamKe         Int
+  waktuMulai    String
+  waktuSelesai  String
+  kelasId       String
+  mapelId       String?
+  guruId        String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Guru          Guru            @relation(fields: [guruId], references: [id], onDelete: Cascade)
+  MataPelajaran MataPelajaran?  @relation(fields: [mapelId], references: [id], onDelete: SetNull)
+  Kelas         Kelas           @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  KehadiranGuru KehadiranGuru[]
+
+  @@unique([hari, jamKe, kelasId])
+  @@index([kelasId])
+  @@index([guruId])
+  @@index([hari])
+}
+
+model JadwalPiket {
+  id        String   @id @default(cuid())
+  hari      String
+  shift     String
+  guruId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Guru      Guru     @relation(fields: [guruId], references: [id], onDelete: Cascade)
+
+  @@unique([hari, shift])
+  @@index([hari])
 }
 
-// Kelas
+model KehadiranGuru {
+  id         String   @id @default(cuid())
+  tanggal    DateTime @db.Date
+  jadwalId   String
+  guruId     String
+  status     String
+  keterangan String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Guru       Guru     @relation(fields: [guruId], references: [id], onDelete: Cascade)
+  Jadwal     Jadwal   @relation(fields: [jadwalId], references: [id], onDelete: Cascade)
+
+  @@unique([tanggal, jadwalId])
+  @@index([status])
+  @@index([guruId])
+  @@index([tanggal])
+}
+
+model KehadiranGuruPiket {
+  id         String   @id @default(cuid())
+  tanggal    DateTime @db.Date
+  guruId     String
+  shift      String
+  status     String
+  keterangan String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Guru       Guru     @relation(fields: [guruId], references: [id], onDelete: Cascade)
+
+  @@unique([tanggal, guruId, shift])
+  @@index([shift])
+  @@index([tanggal])
+}
+
+model KehadiranSiswa {
+  id         String   @id @default(cuid())
+  tanggal    DateTime @db.Date
+  siswaId    String
+  kelasId    String
+  status     String
+  keterangan String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Kelas      Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  Siswa      Siswa    @relation(fields: [siswaId], references: [id], onDelete: Cascade)
+
+  @@unique([tanggal, siswaId])
+  @@index([status])
+  @@index([kelasId])
+  @@index([tanggal])
+}
+
 model Kelas {
-  id              String @id @default(cuid())
-  nama            String @unique // "7A", "7B", "9A", etc.
-  tingkat         Int // 7, 8, atau 9
-  shift           String // "PAGI" atau "SIANG"
-  siswa           Siswa[]
-  jadwal          Jadwal[]
-  kehadiranSiswa  KehadiranSiswa[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String           @id @default(cuid())
+  nama           String           @unique
+  tingkat        Int
+  shift          String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Jadwal         Jadwal[]
+  KehadiranSiswa KehadiranSiswa[]
+  Siswa          Siswa[]
+
+  @@index([shift])
 }
 
-// Siswa
-model Siswa {
-  id              String @id @default(cuid())
-  nama            String
-  kelasId         String
-  kelas           Kelas  @relation(fields: [kelasId], references: [id])
-  kehadiranSiswa  KehadiranSiswa[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+model MataPelajaran {
+  id        String   @id @default(cuid())
+  kode      String   @unique
+  nama      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Jadwal    Jadwal[]
 }
 
-// Jadwal Pelajaran
-model Jadwal {
-  id            String @id @default(cuid())
-  hari          String // "Senin", "Selasa", etc.
-  jamKe         Int // 1, 2, 3, etc.
-  waktuMulai    String // "07:00"
-  waktuSelesai  String // "07:30"
-  kelasId       String
-  kelas         Kelas @relation(fields: [kelasId], references: [id])
-  mapelId       String?
-  mapel         MataPelajaran? @relation(fields: [mapelId], references: [id])
-  guruId        String
-  guru          Guru @relation(fields: [guruId], references: [id])
-  kehadiranGuru KehadiranGuru[]
+model Pengaturan {
+  id            String   @id @default(cuid())
+  namaSekolah   String
+  alamatSekolah String?
+  telepon       String?
+  email         String?
+  kepalaSekolah String?
+  semester      String
+  tahunAjaran   String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  
-  @@unique([hari, jamKe, kelasId])
+  logo          String?
 }
 
-// Kehadiran Guru Mengajar
-model KehadiranGuru {
-  id          String @id @default(cuid())
-  tanggal     DateTime
-  jadwalId    String
-  jadwal      Jadwal @relation(fields: [jadwalId], references: [id])
-  guruId      String
-  guru        Guru @relation(fields: [guruId], references: [id])
-  status      String // "HADIR", "TIDAK_HADIR"
-  keterangan  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@unique([tanggal, jadwalId])
-}
+model Siswa {
+  id             String           @id @default(cuid())
+  nama           String
+  kelasId        String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  KehadiranSiswa KehadiranSiswa[]
+  Kelas          Kelas            @relation(fields: [kelasId], references: [id], onDelete: Cascade)
 
-// Kehadiran Siswa
-model KehadiranSiswa {
-  id          String @id @default(cuid())
-  tanggal     DateTime
-  siswaId     String
-  siswa       Siswa @relation(fields: [siswaId], references: [id])
-  kelasId     String
-  kelas       Kelas @relation(fields: [kelasId], references: [id])
-  status      String // "HADIR", "SAKIT", "IZIN", "ALFA", "KABUR"
-  keterangan  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@unique([tanggal, siswaId])
+  @@index([nama])
+  @@index([kelasId])
 }

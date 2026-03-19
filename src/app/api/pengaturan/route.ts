@@ -26,7 +26,7 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    const { namaSekolah, alamatSekolah, telepon, email, kepalaSekolah, semester, tahunAjaran } = body;
+    const { namaSekolah, alamatSekolah, telepon, email, kepalaSekolah, semester, tahunAjaran, logo } = body;
     
     let pengaturan = await db.pengaturan.findFirst();
     
@@ -40,6 +40,7 @@ export async function PUT(request: Request) {
           kepalaSekolah,
           semester,
           tahunAjaran,
+          logo,
         },
       });
     } else {
@@ -53,6 +54,7 @@ export async function PUT(request: Request) {
           kepalaSekolah,
           semester,
           tahunAjaran,
+          ...(logo !== undefined && { logo }),
         },
       });
     }

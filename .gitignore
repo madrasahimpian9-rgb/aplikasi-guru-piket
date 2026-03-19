@@ -1,51 +1,77 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-# dependencies
-node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Testing
+coverage/
 
-# testing
-/coverage
+# Next.js
+.next/
+out/
 
-# next.js
-/.next/
-/out/
+# Production
+build/
+dist/
 
-# production
-/build
-
-# misc
+# Misc
 .DS_Store
 *.pem
 
-# debug
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Local env files
+.env
+.env*.local
+.env.production
 
-# vercel
+# Vercel
 .vercel
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
-local-*
-.claude
-.z-ai-config
-dev.log
-test
-prompt
 
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+db/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+dev.log
 server.log
-# Skills directory
-/skills/
+
+# Uploads (temporary)
+upload/
+
+# Old Base44 project
+aplikasi-guru-piket-base44/
+aplikasi-guru-piket-base44-v2/
+aplikasi-guru-piket-base44.zip
+aplikasi-guru-piket-base44-v2.zip
+
+# Scripts (not needed for production)
+scripts/
+export-data.js
+
+# Analysis files
+monitoring_analysis.json
+schedule_analysis.json
+RINGKASAN_APLIKASI_GURU_PIKET.txt
+base44-seed-data.json
+
+# Examples
+examples/
+
+# Mini services
+mini-services/

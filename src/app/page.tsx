@@ -43,7 +43,9 @@ import {
   Download,
   Search,
   Filter,
-  FileSpreadsheet
+  FileSpreadsheet,
+  ImageIcon,
+  CalendarDays
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
@@ -59,6 +61,7 @@ interface Pengaturan {
   kepalaSekolah?: string;
   semester: string;
   tahunAjaran: string;
+  logo?: string;
 }
 
 interface Guru {
@@ -126,12 +129,32 @@ interface KehadiranSiswa {
   kelas?: Kelas;
 }
 
+interface JadwalPiket {
+  id: string;
+  hari: string;
+  shift: string;
+  guruId: string;
+  guru?: Guru;
+}
+
+interface KehadiranGuruPiket {
+  id: string;
+  tanggal: string;
+  guruId: string;
+  shift: string;
+  status: string;
+  keterangan?: string;
+  guru?: Guru;
+}
+
 interface DashboardData {
   tanggal: string;
   hari: string;
   jadwalHariIni: Jadwal[];
   kehadiranGuru: KehadiranGuru[];
   kehadiranSiswa: KehadiranSiswa[];
+  jadwalPiketHariIni: JadwalPiket[];
+  kehadiranGuruPiket: KehadiranGuruPiket[];
   ketidakhadiranPerKelas: Array<{
     kelasId: string;
     kelas: string;
@@ -179,6 +202,13 @@ const STATUS_GURU = [
   { value: 'TIDAK_HADIR', label: 'Tidak Hadir', color: 'bg-red-500' },
 ];
 
+// Konstanta jumlah jam per shift
+const MAX_JAM_PAGI = 9;  // Jam 1-9
+const MAX_JAM_SIANG = 8; // Jam 1-8
+
+// Helper untuk mendapatkan jumlah jam berdasarkan shift
+const getMaxJam = (shift: string) => shift === 'PAGI' ? MAX_JAM_PAGI : MAX_JAM_SIANG;
+
 export default function Home() {
   // State
   const [mounted, setMounted] = useState(false);
@@ -194,6 +224,8 @@ export default function Home() {
   const [selectedKelas, setSelectedKelas] = useState<string>('all');
   const [selectedHari, setSelectedHari] = useState<string>('Senin');
   const [selectedShift, setSelectedShift] = useState<string>('');
+  const [selectedShiftDashboard, setSelectedShiftDashboard] = useState<string>('');
+  const [selectedShiftSiswa, setSelectedShiftSiswa] = useState<string>('');
   
   // Form states
   const [guruForm, setGuruForm] = useState({ kode: '', nama: '', gelar: '' });
@@ -215,6 +247,7 @@ export default function Home() {
     kepalaSekolah: '',
     semester: 'Genap',
     tahunAjaran: '',
+    logo: '',
   });
 
   // Dialog states
@@ -237,8 +270,13 @@ export default function Home() {
   // Laporan states
   const [laporanBulan, setLaporanBulan] = useState(new Date().getMonth() + 1);
   const [laporanTahun, setLaporanTahun] = useState(new Date().getFullYear());
-  const [laporanTipe, setLaporanTipe] = useState<'guru' | 'siswa'>('guru');
+  const [laporanTipe, setLaporanTipe] = useState<'guru' | 'siswa' | 'piket'>('guru');
   const [laporanData, setLaporanData] = useState<unknown[]>([]);
+
+  // Jadwal Piket states
+  const [jadwalPiketList, setJadwalPiketList] = useState<JadwalPiket[]>([]);
+  const [kehadiranGuruPiketList, setKehadiranGuruPiketList] = useState<Record<string, string>>({});
+  const [keteranganGuruPiket, setKeteranganGuruPiket] = useState<Record<string, string>>({});
 
   // Search states
   const [searchSiswa, setSearchSiswa] = useState('');
@@ -343,6 +381,7 @@ export default function Home() {
         kepalaSekolah: data.kepalaSekolah || '',
         semester: data.semester || 'Genap',
         tahunAjaran: data.tahunAjaran || '',
+        logo: data.logo || '',
       });
     } catch (error) {
       console.error('Error fetching pengaturan:', error);
@@ -445,6 +484,38 @@ export default function Home() {
     }
   };
 
+  const fetchJadwalPiket = async (hari?: string) => {
+    try {
+      const params = new URLSearchParams();
+      if (hari) params.append('hari', hari);
+      const res = await fetch(`/api/jadwal-piket?${params.toString()}`);
+      const data = await res.json();
+      setJadwalPiketList(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching jadwal piket:', error);
+      return [];
+    }
+  };
+
+  const fetchKehadiranGuruPiket = async (tanggal: string) => {
+    try {
+      const res = await fetch(`/api/kehadiran-guru-piket?tanggal=${tanggal}`);
+      const data = await res.json();
+      const map: Record<string, string> = {};
+      const ketMap: Record<string, string> = {};
+      data.forEach((k: KehadiranGuruPiket) => {
+        const key = `${k.guruId}_${k.shift}`;
+        map[key] = k.status;
+        if (k.keterangan) ketMap[key] = k.keterangan;
+      });
+      setKehadiranGuruPiketList(map);
+      setKeteranganGuruPiket(ketMap);
+    } catch (error) {
+      console.error('Error fetching kehadiran guru piket:', error);
+    }
+  };
+
   // Load jadwal matrix from jadwalList
   const loadJadwalMatrix = useCallback(() => {
     const matrix: Record<string, Record<number, string>> = {};
@@ -489,29 +560,30 @@ export default function Home() {
         waktuSelesai: string;
       }> = [];
       
-      // Time slots based on shift (9 jam per shift)
+      // Time slots based on shift
+      // SHIFT PAGI: 9 jam (07:00-12:30)
       const waktuPagi = [
-        { jam: 1, mulai: '06:30', selesai: '07:10' },
-        { jam: 2, mulai: '07:10', selesai: '07:50' },
-        { jam: 3, mulai: '07:50', selesai: '08:30' },
-        { jam: 4, mulai: '08:30', selesai: '09:10' },
-        { jam: 5, mulai: '09:25', selesai: '10:05' },
-        { jam: 6, mulai: '10:05', selesai: '10:45' },
-        { jam: 7, mulai: '10:45', selesai: '11:25' },
-        { jam: 8, mulai: '11:25', selesai: '12:05' },
-        { jam: 9, mulai: '12:05', selesai: '12:45' },
+        { jam: 1, mulai: '07:00', selesai: '07:35' },
+        { jam: 2, mulai: '07:35', selesai: '08:10' },
+        { jam: 3, mulai: '08:10', selesai: '08:45' },
+        { jam: 4, mulai: '08:45', selesai: '09:20' },
+        { jam: 5, mulai: '09:40', selesai: '10:15' },
+        { jam: 6, mulai: '10:15', selesai: '10:50' },
+        { jam: 7, mulai: '10:50', selesai: '11:25' },
+        { jam: 8, mulai: '11:25', selesai: '12:00' },
+        { jam: 9, mulai: '12:00', selesai: '12:30' },
       ];
       
+      // SHIFT SIANG: 8 jam (12:40-17:00)
       const waktuSiang = [
-        { jam: 1, mulai: '12:40', selesai: '13:15' },
-        { jam: 2, mulai: '13:15', selesai: '13:50' },
-        { jam: 3, mulai: '13:50', selesai: '14:25' },
-        { jam: 4, mulai: '14:25', selesai: '15:00' },
-        { jam: 5, mulai: '15:15', selesai: '15:50' },
-        { jam: 6, mulai: '15:50', selesai: '16:25' },
-        { jam: 7, mulai: '16:25', selesai: '16:55' },
-        { jam: 8, mulai: '16:55', selesai: '17:25' },
-        { jam: 9, mulai: '17:25', selesai: '18:00' },
+        { jam: 1, mulai: '12:40', selesai: '13:10' },
+        { jam: 2, mulai: '13:10', selesai: '13:40' },
+        { jam: 3, mulai: '13:40', selesai: '14:10' },
+        { jam: 4, mulai: '14:10', selesai: '14:40' },
+        { jam: 5, mulai: '14:40', selesai: '15:10' },
+        { jam: 6, mulai: '15:10', selesai: '15:40' },
+        { jam: 7, mulai: '16:00', selesai: '16:30' },
+        { jam: 8, mulai: '16:30', selesai: '17:00' },
       ];
       
       const waktuSlots = selectedShiftJadwal === 'PAGI' ? waktuPagi : waktuSiang;
@@ -575,13 +647,7 @@ export default function Home() {
     });
   };
 
-  // Add new guru row to matrix
-  const addGuruToMatrix = (guruId: string) => {
-    setJadwalMatrix(prev => ({
-      ...prev,
-      [guruId]: prev[guruId] || {},
-    }));
-  };
+
 
   const fetchLaporan = async () => {
     try {
@@ -599,30 +665,47 @@ export default function Home() {
   // Initialize data
   useEffect(() => {
     setMounted(true);
-    fetchPengaturan();
-    fetchGuru();
-    fetchKelas();
-    fetchSiswa();
-    fetchJadwal();
-    fetchDashboard();
+    // Parallelize all initial API calls for faster loading
+    setLoading(true);
+    Promise.all([
+      fetchPengaturan(),
+      fetchGuru(),
+      fetchKelas(),
+      fetchSiswa(),
+      fetchJadwal(),
+      fetchJadwalPiket(),
+      fetchDashboard(),
+    ]).finally(() => setLoading(false));
   }, []);
 
   // Update dashboard when date changes
   useEffect(() => {
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
-    fetchDashboard(dateStr);
-    fetchKehadiranGuru(dateStr);
-    if (selectedKelas && selectedKelas !== 'all') {
-      fetchKehadiranSiswa(dateStr, selectedKelas);
-    } else {
-      fetchKehadiranSiswa(dateStr);
-    }
+    // Parallelize API calls for faster loading
+    Promise.all([
+      fetchDashboard(dateStr),
+      fetchKehadiranGuru(dateStr),
+      fetchKehadiranGuruPiket(dateStr),
+      selectedKelas && selectedKelas !== 'all' 
+        ? fetchKehadiranSiswa(dateStr, selectedKelas)
+        : fetchKehadiranSiswa(dateStr),
+    ]);
   }, [selectedDate, selectedKelas]);
 
   // Update jadwal when hari changes
   useEffect(() => {
     fetchJadwal(selectedHari);
   }, [selectedHari]);
+
+  // Sync selectedHari with selectedDate's day of week
+  useEffect(() => {
+    const dayOfWeek = selectedDate.getDay(); // 0 = Minggu, 1 = Senin, etc.
+    const hariNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const newHari = hariNames[dayOfWeek];
+    if (newHari !== selectedHari && newHari !== 'Minggu') {
+      setSelectedHari(newHari);
+    }
+  }, [selectedDate]);
 
   // CRUD functions
   const savePengaturan = async () => {
@@ -821,6 +904,65 @@ export default function Home() {
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Gagal menghapus jadwal!');
+    }
+  };
+
+  // Jadwal Piket CRUD
+  const saveJadwalPiket = async (hari: string, shift: string, guruId: string) => {
+    try {
+      const res = await fetch('/api/jadwal-piket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hari, shift, guruId }),
+      });
+      
+      if (res.ok) {
+        await fetchJadwalPiket();
+        return true;
+      } else {
+        const error = await res.json();
+        throw new Error(error.error || 'Gagal menyimpan jadwal piket');
+      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Gagal menyimpan jadwal piket!');
+      return false;
+    }
+  };
+
+  const deleteJadwalPiket = async (id: string) => {
+    if (!confirm('Yakin ingin menghapus jadwal piket ini?')) return;
+    try {
+      const res = await fetch(`/api/jadwal-piket?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        alert('Jadwal piket berhasil dihapus!');
+        await fetchJadwalPiket();
+      } else {
+        const error = await res.json();
+        throw new Error(error.error || 'Gagal menghapus jadwal piket');
+      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Gagal menghapus jadwal piket!');
+    }
+  };
+
+  // Kehadiran Guru Piket
+  const saveKehadiranGuruPiket = async (guruId: string, shift: string, status: string, keterangan?: string) => {
+    try {
+      const tanggal = format(selectedDate, 'yyyy-MM-dd');
+      const res = await fetch('/api/kehadiran-guru-piket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tanggal, guruId, shift, status, keterangan }),
+      });
+      
+      if (res.ok) {
+        await fetchKehadiranGuruPiket(tanggal);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error saving kehadiran guru piket:', error);
+      return false;
     }
   };
 
@@ -1028,8 +1170,8 @@ export default function Home() {
         'Nama Guru': `${guru.nama} ${guru.gelar || ''}`,
       };
       
-      // Add columns for each jam (1-10)
-      for (let jam = 1; jam <= 10; jam++) {
+      // Add columns for each jam (1-9 for PAGI shift, max jam is 9)
+      for (let jam = 1; jam <= MAX_JAM_PAGI; jam++) {
         const jadwal = jadwalGuru.find(j => j.jamKe === jam);
         row[`Jam ${jam}`] = jadwal 
           ? `${jadwal.kelas?.nama || '-'}${kehadiranGuruList[jadwal.id] === 'TIDAK_HADIR' ? ' (TH)' : ''}`
@@ -1049,7 +1191,7 @@ export default function Home() {
     const colWidths = [
       { wch: 5 },   // No
       { wch: 30 },  // Nama Guru
-      ...Array(10).fill({ wch: 10 }), // Jam 1-10
+      ...Array(MAX_JAM_PAGI).fill({ wch: 10 }), // Jam 1-9
       { wch: 5 },   // H
       { wch: 5 },   // TH
     ];
@@ -1094,7 +1236,7 @@ export default function Home() {
   const saveKehadiranGuru = async () => {
     try {
       const tanggal = format(selectedDate, 'yyyy-MM-dd');
-      const jadwalHariIni = await fetchJadwal(dashboardData?.hari || 'Senin');
+      const jadwalHariIni = await fetchJadwal(selectedHari);
       
       const kehadiranData = jadwalHariIni.map(j => ({
         tanggal,
@@ -1120,6 +1262,35 @@ export default function Home() {
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Gagal menyimpan kehadiran guru!');
+    }
+  };
+
+  // Autosave single kehadiran
+  const autosaveKehadiranGuru = async (jadwalId: string, status: string) => {
+    try {
+      const tanggal = format(selectedDate, 'yyyy-MM-dd');
+      
+      const kehadiranData = [{
+        tanggal,
+        jadwalId,
+        guruId: jadwalList.find(j => j.id === jadwalId)?.guruId || '',
+        status,
+        keterangan: keteranganGuru[jadwalId] || '',
+      }];
+
+      const res = await fetch('/api/kehadiran/guru', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(kehadiranData),
+      });
+
+      if (res.ok) {
+        // Refresh data silently
+        fetchDashboard(tanggal);
+        fetchKehadiranGuru(tanggal);
+      }
+    } catch (error) {
+      console.error('Autosave error:', error);
     }
   };
 
@@ -1166,9 +1337,96 @@ export default function Home() {
   // Print berita acara
   const printBeritaAcara = () => {
     const tanggalStr = format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id });
-    const jadwalHariIni = jadwalList.filter(j => j.hari === dashboardData?.hari);
-    const guruHadir = jadwalHariIni.filter(j => kehadiranGuruList[j.id] !== 'TIDAK_HADIR');
-    const guruTidakHadir = jadwalHariIni.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR');
+    const jadwalHariIni = jadwalList.filter(j => j.hari === selectedHari);
+    
+    // Get guru piket
+    const piketPagi = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'PAGI');
+    const piketSiang = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'SIANG');
+    
+    // Group jadwal by shift and guru
+    const getGuruStats = (shift: string) => {
+      const jadwalShift = jadwalHariIni.filter(j => j.kelas?.shift === shift);
+      const guruMap = new Map<string, { guru: Guru; jadwal: Jadwal[] }>();
+      
+      jadwalShift.forEach((j) => {
+        if (!guruMap.has(j.guruId)) {
+          guruMap.set(j.guruId, { guru: j.guru!, jadwal: [] });
+        }
+        guruMap.get(j.guruId)!.jadwal.push(j);
+      });
+      
+      return Array.from(guruMap.values()).sort((a, b) => 
+        a.guru.nama.localeCompare(b.guru.nama)
+      ).map(({ guru, jadwal }) => {
+        const totalJam = jadwal.length;
+        const jadwalTidakHadir = jadwal.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR');
+        const totalTidakHadir = jadwalTidakHadir.length;
+        const totalHadir = totalJam - totalTidakHadir;
+        const alasanList = jadwalTidakHadir.map(j => {
+          const alasan = keteranganGuru[j.id];
+          return alasan ? `Jam ${j.jamKe}: ${alasan}` : `Jam ${j.jamKe}`;
+        }).join(', ');
+        
+        return {
+          guru,
+          totalJam,
+          totalHadir,
+          totalTidakHadir,
+          alasan: alasanList || '-'
+        };
+      });
+    };
+    
+    const guruPagi = getGuruStats('PAGI');
+    const guruSiang = getGuruStats('SIANG');
+    
+    // Get list of absent students
+    const siswaTidakHadir = siswaList
+      .filter(s => {
+        const status = kehadiranSiswaList[s.id];
+        return status && status !== 'HADIR';
+      })
+      .map(s => ({
+        nama: s.nama,
+        kelas: s.kelas?.nama || kelasList.find(k => k.id === s.kelasId)?.nama || '-',
+        shift: s.kelas?.shift || kelasList.find(k => k.id === s.kelasId)?.shift || '-',
+        status: kehadiranSiswaList[s.id],
+        keterangan: keteranganSiswa[s.id] || '-'
+      }))
+      .sort((a, b) => {
+        // Sort by shift first, then by kelas, then by nama
+        if (a.shift !== b.shift) return a.shift.localeCompare(b.shift);
+        if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
+        return a.nama.localeCompare(b.nama);
+      });
+
+    // Status label mapping
+    const getStatusLabel = (status: string) => {
+      switch (status) {
+        case 'SAKIT': return 'Sakit';
+        case 'IZIN': return 'Izin';
+        case 'ALFA': return 'Alfa';
+        case 'KABUR': return 'Kabur';
+        default: return status;
+      }
+    };
+
+    // Generate guru table rows
+    const generateGuruRows = (guruList: Array<{ guru: Guru; totalJam: number; totalHadir: number; totalTidakHadir: number; alasan: string }>) => {
+      if (guruList.length === 0) {
+        return '<tr><td colspan="6" class="center">Tidak ada jadwal</td></tr>';
+      }
+      return guruList.map((g, i) => `
+        <tr>
+          <td class="center">${i + 1}</td>
+          <td>${g.guru.nama} ${g.guru.gelar || ''}</td>
+          <td class="center">${g.totalJam}</td>
+          <td class="center hadir">${g.totalHadir}</td>
+          <td class="center ${g.totalTidakHadir > 0 ? 'tidak-hadir' : ''}">${g.totalTidakHadir}</td>
+          <td class="ket">${g.alasan}</td>
+        </tr>
+      `).join('');
+    };
 
     const printContent = `
       <!DOCTYPE html>
@@ -1176,115 +1434,144 @@ export default function Home() {
       <head>
         <title>Berita Acara KBM</title>
         <style>
-          @page { size: A4 landscape; margin: 1cm; }
-          body { font-family: Arial, sans-serif; font-size: 12px; }
-          .header { text-align: center; margin-bottom: 20px; }
-          .header h1 { margin: 0; font-size: 16px; }
-          .header h2 { margin: 5px 0; font-size: 14px; font-weight: normal; }
-          .info { margin-bottom: 15px; }
-          .info p { margin: 3px 0; }
-          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-          th, td { border: 1px solid #333; padding: 5px; text-align: left; }
-          th { background: #f0f0f0; }
-          .section-title { font-weight: bold; margin: 15px 0 10px; }
-          .footer { margin-top: 30px; display: flex; justify-content: space-between; }
-          .signature { text-align: center; width: 200px; }
-          .signature-line { border-top: 1px solid #333; margin-top: 60px; padding-top: 5px; }
+          @page { size: A4 landscape; margin: 0.7cm; }
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+          body { font-family: Arial, sans-serif; font-size: 9px; margin: 0; padding: 0; }
+          .header { text-align: center; margin-bottom: 8px; }
+          .header-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; }
+          .header-logo img { width: 50px; height: 50px; object-fit: contain; }
+          .header-text h1 { margin: 0; font-size: 13px; font-weight: bold; }
+          .header-text h2 { margin: 2px 0; font-size: 10px; font-weight: normal; }
+          .header h3 { margin: 6px 0; font-size: 13px; text-decoration: underline; }
+          .info { margin-bottom: 6px; }
+          .info p { margin: 2px 0; }
+          .piket-info { margin-bottom: 8px; padding: 5px 8px; background: #f5f5f5 !important; border-radius: 4px; display: flex; gap: 30px; }
+          .piket-info p { margin: 0; }
+          .section-title { font-weight: bold; margin: 8px 0 4px; font-size: 10px; }
+          .shift-tables { display: flex; gap: 8px; margin-bottom: 8px; }
+          .shift-table { flex: 1; }
+          .shift-title { font-weight: bold; margin-bottom: 3px; padding: 3px 6px; color: #fff !important; font-size: 9px; }
+          .shift-pagi { background: #b45309 !important; }
+          .shift-siang { background: #1d4ed8 !important; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { border: 1px solid #333; padding: 2px 4px; text-align: left; }
+          th { background: #f0f0f0 !important; font-size: 8px; }
+          td { font-size: 8px; }
+          td.ket { font-size: 7px; }
+          .center { text-align: center; }
+          .hadir { color: #16a34a; font-weight: bold; }
+          .tidak-hadir { color: #dc2626; font-weight: bold; }
+          .siswa-table { margin-bottom: 6px; }
+          .siswa-section { display: flex; gap: 8px; }
+          .siswa-column { flex: 1; }
+          .status-sakit { background: #fef3c7 !important; }
+          .status-izin { background: #dbeafe !important; }
+          .status-alfa { background: #fee2e2 !important; }
+          .status-kabur { background: #ffedd5 !important; }
+          .no-absent { text-align: center; padding: 10px; background: #f0fdf4 !important; border: 1px solid #bbf7d0; border-radius: 4px; margin-bottom: 6px; color: #166534; }
+          .footer { margin-top: 10px; display: flex; justify-content: space-between; padding: 0 20px; }
+          .signature { text-align: center; width: 150px; }
+          .signature p { margin: 2px 0; font-size: 9px; }
+          .signature-line { border-top: 1px solid #333; margin-top: 35px; padding-top: 3px; font-size: 9px; }
+          .footer-date { text-align: right; margin-bottom: 5px; font-size: 9px; }
         </style>
       </head>
       <body>
         <div class="header">
-          <h1>BERITA ACARA KEGIATAN BELAJAR MENGAJAR (KBM)</h1>
-          <h2>${pengaturan?.namaSekolah || 'Madrasah Tsanawiyah'}</h2>
-          <h2>Tahun Pelajaran ${pengaturan?.tahunAjaran || '-'} Semester ${pengaturan?.semester || '-'}</h2>
+          <div class="header-logo">
+            ${pengaturan?.logo ? `<img src="${pengaturan.logo}" alt="Logo" />` : ''}
+            <div class="header-text">
+              <h1>${pengaturan?.namaSekolah || 'Madrasah Tsanawiyah'}</h1>
+              <h2>${pengaturan?.alamatSekolah || ''}</h2>
+              <h2>Tahun Pelajaran ${pengaturan?.tahunAjaran || '-'} Semester ${pengaturan?.semester || '-'}</h2>
+            </div>
+          </div>
+          <h3>BERITA ACARA KEGIATAN BELAJAR MENGAJAR (KBM)</h3>
         </div>
         
         <div class="info">
           <p><strong>Hari/Tanggal:</strong> ${tanggalStr}</p>
         </div>
         
-        <div class="section-title">I. GURU YANG MENGAJAR HARI INI:</div>
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Jam</th>
-              <th>Kelas</th>
-              <th>Mata Pelajaran</th>
-              <th>Nama Guru</th>
-              <th>Status</th>
-              <th>Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${jadwalHariIni.map((j, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${j.waktuMulai} - ${j.waktuSelesai}</td>
-                <td>${j.kelas?.nama || '-'}</td>
-                <td>${j.mapel?.nama || '-'}</td>
-                <td>${j.guru?.nama}${j.guru?.gelar ? ', ' + j.guru.gelar : ''}</td>
-                <td>${kehadiranGuruList[j.id] === 'TIDAK_HADIR' ? 'Tidak Hadir' : 'Hadir'}</td>
-                <td>${keteranganGuru[j.id] || '-'}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+        <div class="piket-info">
+          <p><strong>Guru Piket Pagi:</strong> ${piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '-'}</p>
+          <p><strong>Guru Piket Siang:</strong> ${piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '-'}</p>
+        </div>
         
-        ${guruTidakHadir.length > 0 ? `
-          <div class="section-title">II. GURU YANG BERHALANGAN HADIR:</div>
-          <table>
+        <div class="section-title">I. REKAP KEHADIRAN GURU:</div>
+        
+        <div class="shift-tables">
+          <div class="shift-table">
+            <div class="shift-title shift-pagi">SHIFT PAGI (07:00 - 12:30 WIB)</div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="center" style="width: 25px;">No</th>
+                  <th>Nama Guru</th>
+                  <th class="center" style="width: 35px;">Jam</th>
+                  <th class="center" style="width: 30px;">H</th>
+                  <th class="center" style="width: 30px;">TH</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${generateGuruRows(guruPagi)}
+              </tbody>
+            </table>
+          </div>
+          <div class="shift-table">
+            <div class="shift-title shift-siang">SHIFT SIANG (12:40 - 17:00 WIB)</div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="center" style="width: 25px;">No</th>
+                  <th>Nama Guru</th>
+                  <th class="center" style="width: 35px;">Jam</th>
+                  <th class="center" style="width: 30px;">H</th>
+                  <th class="center" style="width: 30px;">TH</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${generateGuruRows(guruSiang)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="section-title">II. DAFTAR SISWA TIDAK HADIR:</div>
+        ${siswaTidakHadir.length > 0 ? `
+          <table class="siswa-table">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Nama Guru</th>
-                <th>Mata Pelajaran</th>
-                <th>Kelas</th>
-                <th>Alasan</th>
+                <th class="center" style="width: 25px;">No</th>
+                <th style="width: 180px;">Nama Siswa</th>
+                <th class="center" style="width: 50px;">Kelas</th>
+                <th class="center" style="width: 50px;">Shift</th>
+                <th class="center" style="width: 60px;">Status</th>
+                <th>Keterangan</th>
               </tr>
             </thead>
             <tbody>
-              ${guruTidakHadir.map((j, i) => `
-                <tr>
-                  <td>${i + 1}</td>
-                  <td>${j.guru?.nama}${j.guru?.gelar ? ', ' + j.guru.gelar : ''}</td>
-                  <td>${j.mapel?.nama || '-'}</td>
-                  <td>${j.kelas?.nama || '-'}</td>
-                  <td>${keteranganGuru[j.id] || '-'}</td>
+              ${siswaTidakHadir.map((s, i) => `
+                <tr class="${s.status === 'SAKIT' ? 'status-sakit' : s.status === 'IZIN' ? 'status-izin' : s.status === 'ALFA' ? 'status-alfa' : 'status-kabur'}">
+                  <td class="center">${i + 1}</td>
+                  <td>${s.nama}</td>
+                  <td class="center">${s.kelas}</td>
+                  <td class="center">${s.shift}</td>
+                  <td class="center"><strong>${getStatusLabel(s.status)}</strong></td>
+                  <td>${s.keterangan}</td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
-        ` : ''}
+        ` : `
+          <div class="no-absent">
+            <strong>Semua siswa hadir hari ini</strong>
+          </div>
+        `}
         
-        <div class="section-title">III. KETIDAKHADIRAN SISWA:</div>
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Kelas</th>
-              <th>Sakit</th>
-              <th>Izin</th>
-              <th>Alfa</th>
-              <th>Kabur</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${dashboardData?.ketidakhadiranPerKelas.map((k, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${k.kelas}</td>
-                <td>${k.sakit}</td>
-                <td>${k.izin}</td>
-                <td>${k.alfa}</td>
-                <td>${k.kabur}</td>
-                <td>${k.sakit + k.izin + k.alfa + k.kabur}</td>
-              </tr>
-            `).join('') || ''}
-          </tbody>
-        </table>
-        
+        <div class="footer-date">${pengaturan?.alamatSekolah?.split(',')[0] || 'Pasawahan'}, ${tanggalStr}</div>
         <div class="footer">
           <div class="signature">
             <p>Mengetahui,</p>
@@ -1293,8 +1580,13 @@ export default function Home() {
           </div>
           <div class="signature">
             <p>&nbsp;</p>
-            <p>Guru Piket</p>
-            <div class="signature-line">____________________</div>
+            <p>Guru Piket Pagi</p>
+            <div class="signature-line">${piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '____________________'}</div>
+          </div>
+          <div class="signature">
+            <p>&nbsp;</p>
+            <p>Guru Piket Siang</p>
+            <div class="signature-line">${piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '____________________'}</div>
           </div>
         </div>
       </body>
@@ -1328,92 +1620,108 @@ export default function Home() {
     return grouped;
   };
 
-  // Get guru yang mengajar hari ini
+  // Get guru yang mengajar hari ini (filtered by shift if selected)
   const getGuruMengajarHariIni = () => {
-    const jadwalHariIni = jadwalList.filter(j => j.hari === selectedHari);
-    const guruIds = [...new Set(jadwalHariIni.map(j => j.guruId))];
+    let jadwalHariIni = jadwalList.filter(j => j.hari === selectedHari);
     
+    // Filter by shift if selected
+    if (selectedShift) {
+      jadwalHariIni = jadwalHariIni.filter(j => j.kelas?.shift === selectedShift);
+    }
+    
+    const guruIds = [...new Set(jadwalHariIni.map(j => j.guruId))];
     return guruList.filter(g => guruIds.includes(g.id)).sort((a, b) => a.nama.localeCompare(b.nama));
   };
 
-  // Get jadwal by guru
+  // Get jadwal by guru (filtered by shift if selected)
   const getJadwalByGuru = (guruId: string) => {
-    return jadwalList.filter(j => j.guruId === guruId && j.hari === selectedHari).sort((a, b) => a.jamKe - b.jamKe);
+    let jadwal = jadwalList.filter(j => j.guruId === guruId && j.hari === selectedHari);
+    
+    // Filter by shift if selected
+    if (selectedShift) {
+      jadwal = jadwal.filter(j => j.kelas?.shift === selectedShift);
+    }
+    
+    return jadwal.sort((a, b) => a.jamKe - b.jamKe);
+  };
+
+  // Get max jam based on selected shift
+  const getMaxJamForMonitoring = () => {
+    if (selectedShift === 'PAGI') return MAX_JAM_PAGI;
+    if (selectedShift === 'SIANG') return MAX_JAM_SIANG;
+    return MAX_JAM_PAGI; // Default to PAGI when showing all
   };
 
   // Print monitoring
   const printMonitoring = () => {
     const tanggalStr = format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id });
-    const guruMengajar = getGuruMengajarHariIni();
-
-    const printContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Daftar Hadir Jam Tatap Muka</title>
-        <style>
-          @page { size: A4 landscape; margin: 1cm; }
-          body { font-family: Arial, sans-serif; font-size: 11px; }
-          .header { text-align: center; margin-bottom: 15px; }
-          .header h1 { margin: 0; font-size: 14px; font-weight: bold; }
-          .header h2 { margin: 5px 0; font-size: 13px; font-weight: bold; }
-          .header p { margin: 2px 0; font-size: 11px; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #333; padding: 4px; text-align: center; }
-          th { background: #f0f0f0; font-weight: bold; }
-          td.nama { text-align: left; font-weight: bold; }
-          .hadir { background: #d4edda; }
-          .tidak-hadir { background: #f8d7da; }
-          .footer { margin-top: 20px; display: flex; justify-content: space-between; }
-          .signature { text-align: center; width: 180px; }
-          .signature-line { border-top: 1px solid #333; margin-top: 50px; padding-top: 5px; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>DAFTAR HADIR JAM TATAP MUKA PNS, GTY, GTT</h1>
-          <h2>${pengaturan?.namaSekolah || 'MTs Da\'arul Ma\'arif Pasawahan'}</h2>
-          <p>Tahun Pelajaran ${pengaturan?.tahunAjaran || '2025/2026'} Semester ${pengaturan?.semester || 'Genap'}</p>
-          <p>Hari: <strong>${selectedHari}</strong>, Tanggal: <strong>${tanggalStr}</strong></p>
-          <p>Shift: <strong>${selectedShift || 'Semua'}</strong></p>
+    
+    // Get guru piket
+    const piketPagi = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'PAGI');
+    const piketSiang = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'SIANG');
+    
+    // Helper function to generate table for a shift
+    const generateShiftTable = (shift: string, maxJam: number) => {
+      const jadwalShift = jadwalList.filter(j => j.hari === selectedHari && j.kelas?.shift === shift);
+      const guruIds = [...new Set(jadwalShift.map(j => j.guruId))];
+      const guruShift = guruList.filter(g => guruIds.includes(g.id)).sort((a, b) => a.nama.localeCompare(b.nama));
+      
+      return `
+        <div class="shift-section">
+          <div class="shift-header ${shift === 'PAGI' ? 'shift-pagi' : 'shift-siang'}">
+            SHIFT ${shift} (${shift === 'PAGI' ? '07:00 - 12:30 WIB' : '12:40 - 17:00 WIB'})
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 30px;">No</th>
+                <th style="width: 180px;">Nama Guru</th>
+                ${Array.from({ length: maxJam }, (_, i) => `<th>Jam ${i + 1}</th>`).join('')}
+                <th style="width: 40px;">H</th>
+                <th style="width: 40px;">TH</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${guruShift.map((guru, idx) => {
+                const jadwalGuru = jadwalShift.filter(j => j.guruId === guru.id);
+                const totalHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length;
+                const totalTidakHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR').length;
+                
+                return `
+                  <tr>
+                    <td>${idx + 1}</td>
+                    <td class="nama">${guru.nama} ${guru.gelar || ''}</td>
+                    ${Array.from({ length: maxJam }, (_, i) => {
+                      const jam = i + 1;
+                      const jadwal = jadwalGuru.find(j => j.jamKe === jam);
+                      if (!jadwal) return '<td class="kosong">-</td>';
+                      const tidakHadir = kehadiranGuruList[jadwal.id] === 'TIDAK_HADIR';
+                      const kelasNama = jadwal.kelas?.nama || '-';
+                      if (tidakHadir) {
+                        return `<td class="tidak-hadir"><s>${kelasNama}</s></td>`;
+                      }
+                      return `<td class="hadir"><strong>${kelasNama}</strong></td>`;
+                    }).join('')}
+                    <td><strong>${totalHadir}</strong></td>
+                    <td class="th-count"><strong>${totalTidakHadir}</strong></td>
+                  </tr>
+                `;
+              }).join('')}
+              ${guruShift.length === 0 ? `<tr><td colspan="${maxJam + 4}" class="empty-msg">Tidak ada jadwal shift ${shift.toLowerCase()}</td></tr>` : ''}
+            </tbody>
+          </table>
         </div>
-        
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 30px;">No</th>
-              <th style="width: 180px;">Nama Guru</th>
-              ${Array.from({ length: 10 }, (_, i) => `<th>Jam ${i + 1}</th>`).join('')}
-              <th>H</th>
-              <th>TH</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${guruMengajar.map((guru, idx) => {
-              const jadwalGuru = getJadwalByGuru(guru.id);
-              const totalHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length;
-              const totalTidakHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR').length;
-              
-              return `
-                <tr>
-                  <td>${idx + 1}</td>
-                  <td class="nama">${guru.nama} ${guru.gelar || ''}</td>
-                  ${Array.from({ length: 10 }, (_, i) => {
-                    const jam = i + 1;
-                    const jadwal = jadwalGuru.find(j => j.jamKe === jam);
-                    if (!jadwal) return '<td>-</td>';
-                    const tidakHadir = kehadiranGuruList[jadwal.id] === 'TIDAK_HADIR';
-                    const kelasNama = jadwal.kelas?.nama || '-';
-                    return `<td class="${tidakHadir ? 'tidak-hadir' : 'hadir'}"><strong>${kelasNama}</strong></td>`;
-                  }).join('')}
-                  <td><strong>${totalHadir}</strong></td>
-                  <td><strong>${totalTidakHadir}</strong></td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-        
+      `;
+    };
+    
+    // Generate content based on selected shift
+    let tablesContent = '';
+    let footerContent = '';
+    
+    if (selectedShift === 'PAGI') {
+      tablesContent = generateShiftTable('PAGI', MAX_JAM_PAGI);
+      footerContent = `
+        <div class="footer-date">Pasawahan, ${tanggalStr}</div>
         <div class="footer">
           <div class="signature">
             <p>Mengetahui,</p>
@@ -1422,10 +1730,157 @@ export default function Home() {
           </div>
           <div class="signature">
             <p>&nbsp;</p>
-            <p>Guru Piket</p>
-            <div class="signature-line">____________________</div>
+            <p>Guru Piket Pagi</p>
+            <div class="signature-line">${piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '____________________'}</div>
           </div>
         </div>
+      `;
+    } else if (selectedShift === 'SIANG') {
+      tablesContent = generateShiftTable('SIANG', MAX_JAM_SIANG);
+      footerContent = `
+        <div class="footer-date">Pasawahan, ${tanggalStr}</div>
+        <div class="footer">
+          <div class="signature">
+            <p>Mengetahui,</p>
+            <p>Kepala Madrasah</p>
+            <div class="signature-line">${pengaturan?.kepalaSekolah || '____________________'}</div>
+          </div>
+          <div class="signature">
+            <p>&nbsp;</p>
+            <p>Guru Piket Siang</p>
+            <div class="signature-line">${piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '____________________'}</div>
+          </div>
+        </div>
+      `;
+    } else {
+      // All shifts - show both tables on one page with 3 signatures at bottom
+      tablesContent = generateShiftTable('PAGI', MAX_JAM_PAGI);
+      tablesContent += generateShiftTable('SIANG', MAX_JAM_SIANG);
+      footerContent = `
+        <div class="footer-date">Pasawahan, ${tanggalStr}</div>
+        <div class="footer-three">
+          <div class="signature">
+            <p>Mengetahui,</p>
+            <p>Kepala Madrasah</p>
+            <div class="signature-line">${pengaturan?.kepalaSekolah || '____________________'}</div>
+          </div>
+          <div class="signature">
+            <p>&nbsp;</p>
+            <p>Guru Piket Pagi</p>
+            <div class="signature-line">${piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '____________________'}</div>
+          </div>
+          <div class="signature">
+            <p>&nbsp;</p>
+            <p>Guru Piket Siang</p>
+            <div class="signature-line">${piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '____________________'}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Daftar Hadir Jam Tatap Muka</title>
+        <style>
+          @page { size: A4 landscape; margin: 0.8cm; }
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+          body { font-family: Arial, sans-serif; font-size: 10px; }
+          .header { text-align: center; margin-bottom: 10px; }
+          .header-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; }
+          .header-logo img { width: 50px; height: 50px; object-fit: contain; }
+          .header-text h1 { margin: 0; font-size: 13px; font-weight: bold; }
+          .header-text h2 { margin: 3px 0; font-size: 12px; font-weight: bold; }
+          .header p { margin: 2px 0; font-size: 10px; }
+          .shift-section { margin-bottom: 15px; }
+          .shift-header { 
+            font-weight: bold; 
+            padding: 4px 10px; 
+            margin-bottom: 3px;
+            color: #fff !important;
+            font-size: 10px;
+          }
+          .shift-pagi { background: #b45309 !important; }
+          .shift-siang { background: #1d4ed8 !important; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { border: 1px solid #333; padding: 3px; text-align: center; font-size: 9px; }
+          th { background: #f0f0f0 !important; font-weight: bold; }
+          td.nama { text-align: left; font-weight: bold; }
+          .hadir { background: #d4edda !important; color: #155724 !important; }
+          .tidak-hadir { 
+            background: #f8d7da !important; 
+            color: #dc2626 !important; 
+          }
+          .tidak-hadir s {
+            color: #dc2626 !important;
+            text-decoration: line-through;
+          }
+          .kosong { background: #f5f5f5 !important; color: #999 !important; }
+          .th-count { 
+            background: #fef2f2 !important; 
+            color: #dc2626 !important;
+          }
+          .empty-msg { text-align: center; color: #666; padding: 15px; }
+          .footer-date { text-align: right; margin-top: 15px; margin-bottom: 5px; font-size: 10px; }
+          .footer { margin-top: 10px; display: flex; justify-content: space-between; }
+          .footer-three { margin-top: 10px; display: flex; justify-content: space-between; }
+          .signature { text-align: center; width: 150px; }
+          .signature p { margin: 2px 0; font-size: 10px; }
+          .signature-line { border-top: 1px solid #333; margin-top: 40px; padding-top: 3px; font-size: 9px; }
+          .legend { 
+            margin-top: 10px; 
+            padding: 8px; 
+            background: #f9f9f9 !important; 
+            border: 1px solid #ddd;
+            font-size: 9px;
+          }
+          .legend-title { font-weight: bold; margin-bottom: 3px; }
+          .legend-items { display: flex; gap: 15px; flex-wrap: wrap; }
+          .legend-item { display: flex; align-items: center; gap: 4px; }
+          .legend-color { width: 18px; height: 12px; border: 1px solid #333; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="header-logo">
+            ${pengaturan?.logo ? `<img src="${pengaturan.logo}" alt="Logo" />` : ''}
+            <div class="header-text">
+              <h1>DAFTAR HADIR JAM TATAP MUKA PNS, GTY, GTT</h1>
+              <h2>${pengaturan?.namaSekolah || 'MTs Da\'arul Ma\'arif Pasawahan'}</h2>
+              <p>Tahun Pelajaran ${pengaturan?.tahunAjaran || '2025/2026'} Semester ${pengaturan?.semester || 'Genap'}</p>
+            </div>
+          </div>
+          <p style="margin-top: 8px;">Hari: <strong>${selectedHari}</strong>, Tanggal: <strong>${tanggalStr}</strong></p>
+        </div>
+        
+        ${tablesContent}
+        
+        <div class="legend">
+          <div class="legend-title">Keterangan:</div>
+          <div class="legend-items">
+            <div class="legend-item">
+              <div class="legend-color hadir"></div>
+              <span>Guru Hadir</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color tidak-hadir"></div>
+              <span>Guru Tidak Hadir (dicoret merah)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color kosong"></div>
+              <span>Tidak Ada Jadwal</span>
+            </div>
+            <div class="legend-item">
+              <span><strong>H</strong> = Hadir</span>
+            </div>
+            <div class="legend-item">
+              <span><strong>TH</strong> = Tidak Hadir</span>
+            </div>
+          </div>
+        </div>
+        
+        ${footerContent}
       </body>
       </html>
     `;
@@ -1445,9 +1900,17 @@ export default function Home() {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
+              {pengaturan?.logo ? (
+                <img 
+                  src={pengaturan.logo} 
+                  alt="Logo Sekolah" 
+                  className="w-10 h-10 object-contain rounded-lg"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </div>
+              )}
               <div>
                 <h1 className="text-lg font-bold text-gray-900">Aplikasi Guru Piket</h1>
                 <p className="text-xs text-gray-500">{pengaturan?.namaSekolah || 'Loading...'}</p>
@@ -1465,7 +1928,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid grid-cols-7 gap-1 h-auto p-1">
+          <TabsList className="grid grid-cols-8 gap-1 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2 px-2 text-xs">
               <LayoutDashboard className="w-4 h-4" />
               <span>Dashboard</span>
@@ -1477,6 +1940,10 @@ export default function Home() {
             <TabsTrigger value="beritaacara" className="flex flex-col items-center gap-1 py-2 px-2 text-xs">
               <FileText className="w-4 h-4" />
               <span>Berita Acara</span>
+            </TabsTrigger>
+            <TabsTrigger value="jadwalpiket" className="flex flex-col items-center gap-1 py-2 px-2 text-xs">
+              <CalendarDays className="w-4 h-4" />
+              <span>Jadwal Piket</span>
             </TabsTrigger>
             <TabsTrigger value="laporan" className="flex flex-col items-center gap-1 py-2 px-2 text-xs">
               <BarChart3 className="w-4 h-4" />
@@ -1522,7 +1989,7 @@ export default function Home() {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-2">
@@ -1562,100 +2029,230 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-amber-600" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Jadwal Hari Ini</p>
-                      <p className="text-xl font-bold">{dashboardData?.summary.totalJadwalHariIni || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Guru Hadir</p>
-                      <p className="text-xl font-bold">{dashboardData?.summary.guruHadir || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <XCircle className="w-5 h-5 text-red-600" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Guru Tidak Hadir</p>
-                      <p className="text-xl font-bold">{dashboardData?.summary.guruTidakHadir || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
-            {/* Jadwal Hari Ini */}
+            {/* Guru Piket Hari Ini */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5" />
-                  Jadwal KBM - {dashboardData?.hari}
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <CalendarDays className="w-5 h-5 text-primary" />
+                  Guru Piket Hari Ini - {dashboardData?.hari}
                 </CardTitle>
                 <CardDescription>
-                  {mounted ? format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id }) : 'Loading...'}
+                  Daftar guru piket yang bertugas hari ini
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-80">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Jam</TableHead>
-                        <TableHead>Kelas</TableHead>
-                        <TableHead>Guru</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dashboardData?.jadwalHariIni.map((j) => (
-                        <TableRow key={j.id}>
-                          <TableCell className="text-xs">
-                            {j.waktuMulai} - {j.waktuSelesai}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{j.kelas?.nama}</Badge>
-                          </TableCell>
-                          <TableCell>{j.guru?.nama} {j.guru?.gelar}</TableCell>
-                          <TableCell>
-                            {kehadiranGuruList[j.id] === 'TIDAK_HADIR' ? (
-                              <Badge variant="destructive">Tidak Hadir</Badge>
-                            ) : kehadiranGuruList[j.id] ? (
-                              <Badge variant="default" className="bg-green-600">Hadir</Badge>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Shift Pagi */}
+                  <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-amber-600" />
+                        <span className="font-semibold text-amber-800">Shift Pagi</span>
+                      </div>
+                      <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300 text-xs">
+                        07:00 - 12:30
+                      </Badge>
+                    </div>
+                    {(() => {
+                      const piketPagi = dashboardData?.jadwalPiketHariIni?.find(p => p.shift === 'PAGI');
+                      if (!piketPagi?.guru) {
+                        return <span className="text-gray-500 text-sm">Belum ditentukan</span>;
+                      }
+                      const key = `${piketPagi.guruId}_PAGI`;
+                      const status = kehadiranGuruPiketList[key];
+                      return (
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{piketPagi.guru.nama} {piketPagi.guru.gelar || ''}</span>
+                          {status ? (
+                            status === 'HADIR' ? (
+                              <Badge className="bg-green-500">Hadir</Badge>
                             ) : (
-                              <Badge variant="secondary">Belum Absen</Badge>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                      {(!dashboardData?.jadwalHariIni || dashboardData.jadwalHariIni.length === 0) && (
-                        <TableRow>
-                          <TableCell colSpan={4} className="text-center text-gray-500">
-                            Tidak ada jadwal hari ini
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
+                              <Badge variant="destructive">Tidak Hadir</Badge>
+                            )
+                          ) : (
+                            <Badge variant="secondary">Belum Absen</Badge>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  
+                  {/* Shift Siang */}
+                  <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                        <span className="font-semibold text-blue-800">Shift Siang</span>
+                      </div>
+                      <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300 text-xs">
+                        12:40 - 17:00
+                      </Badge>
+                    </div>
+                    {(() => {
+                      const piketSiang = dashboardData?.jadwalPiketHariIni?.find(p => p.shift === 'SIANG');
+                      if (!piketSiang?.guru) {
+                        return <span className="text-gray-500 text-sm">Belum ditentukan</span>;
+                      }
+                      const key = `${piketSiang.guruId}_SIANG`;
+                      const status = kehadiranGuruPiketList[key];
+                      return (
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{piketSiang.guru.nama} {piketSiang.guru.gelar || ''}</span>
+                          {status ? (
+                            status === 'HADIR' ? (
+                              <Badge className="bg-green-500">Hadir</Badge>
+                            ) : (
+                              <Badge variant="destructive">Tidak Hadir</Badge>
+                            )
+                          ) : (
+                            <Badge variant="secondary">Belum Absen</Badge>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Info Kehadiran Guru */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <UserCheck className="w-5 h-5" />
+                      Info Kehadiran Guru - {dashboardData?.hari}
+                    </CardTitle>
+                    <CardDescription>
+                      {mounted ? format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id }) : 'Loading...'}
+                    </CardDescription>
+                  </div>
+                  <Select value={selectedShiftDashboard} onValueChange={(v) => setSelectedShiftDashboard(v === 'all' ? '' : v)}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Pilih Shift" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Semua Shift</SelectItem>
+                      <SelectItem value="PAGI">Shift Pagi</SelectItem>
+                      <SelectItem value="SIANG">Shift Siang</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {/* Summary Cards - Default is HADIR */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                    <div className="text-3xl font-bold text-green-600">
+                      {(dashboardData?.summary.totalJadwalHariIni || 0) - (dashboardData?.summary.guruTidakHadir || 0)}
+                    </div>
+                    <div className="text-sm text-green-700">Guru Hadir</div>
+                  </div>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                    <div className="text-3xl font-bold text-red-600">{dashboardData?.summary.guruTidakHadir || 0}</div>
+                    <div className="text-sm text-red-700">Tidak Hadir</div>
+                  </div>
+                </div>
+
+                {/* Guru Tidak Hadir List */}
+                {Object.entries(kehadiranGuruList).filter(([_, status]) => status === 'TIDAK_HADIR').length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-red-600 mb-2 flex items-center gap-2">
+                      <XCircle className="w-4 h-4" />
+                      Guru Tidak Hadir
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {Object.entries(kehadiranGuruList)
+                        .filter(([jadwalId, status]) => {
+                          if (status !== 'TIDAK_HADIR') return false;
+                          const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
+                          if (!selectedShiftDashboard) return true;
+                          return jadwal?.kelas?.shift === selectedShiftDashboard;
+                        })
+                        .map(([jadwalId, _]) => {
+                          const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
+                          if (!jadwal) return null;
+                          return (
+                            <div key={jadwalId} className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                              <div>
+                                <div className="font-medium">{jadwal.guru?.nama} {jadwal.guru?.gelar}</div>
+                                <div className="text-xs text-gray-600">
+                                  Jam ke-{jadwal.jamKe} | Kelas {jadwal.kelas?.nama} | {jadwal.kelas?.shift}
+                                </div>
+                              </div>
+                              {keteranganGuru[jadwalId] && (
+                                <div className="text-xs text-red-600 italic max-w-32 truncate" title={keteranganGuru[jadwalId]}>
+                                  {keteranganGuru[jadwalId]}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Per Shift Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Shift Pagi */}
+                  {(!selectedShiftDashboard || selectedShiftDashboard === 'PAGI') && (
+                    <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
+                      <h4 className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Shift Pagi (07:00 - 12:30)
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Total Jadwal:</span>
+                          <span className="font-medium">{dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'PAGI').length || 0}</span>
+                        </div>
+                        <div className="flex justify-between text-green-600">
+                          <span>Guru Hadir:</span>
+                          <span className="font-medium">
+                            {dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'PAGI' && kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length || 0}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-red-600">
+                          <span>Tidak Hadir:</span>
+                          <span className="font-medium">
+                            {dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'PAGI' && kehadiranGuruList[j.id] === 'TIDAK_HADIR').length || 0}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Shift Siang */}
+                  {(!selectedShiftDashboard || selectedShiftDashboard === 'SIANG') && (
+                    <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
+                      <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Shift Siang (12:40 - 17:00)
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Total Jadwal:</span>
+                          <span className="font-medium">{dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'SIANG').length || 0}</span>
+                        </div>
+                        <div className="flex justify-between text-green-600">
+                          <span>Guru Hadir:</span>
+                          <span className="font-medium">
+                            {dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'SIANG' && kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length || 0}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-red-600">
+                          <span>Tidak Hadir:</span>
+                          <span className="font-medium">
+                            {dashboardData?.jadwalHariIni?.filter(j => j.kelas?.shift === 'SIANG' && kehadiranGuruList[j.id] === 'TIDAK_HADIR').length || 0}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
@@ -1664,61 +2261,102 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertCircle className="w-5 h-5" />
-                  Ketidakhadiran Siswa Hari Ini
+                  Daftar Siswa Tidak Hadir Hari Ini
                 </CardTitle>
+                <CardDescription>
+                  Siswa yang sakit, izin, alfa, atau kabur
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Kelas</TableHead>
-                      <TableHead>Shift</TableHead>
-                      <TableHead className="text-center">Sakit</TableHead>
-                      <TableHead className="text-center">Izin</TableHead>
-                      <TableHead className="text-center">Alfa</TableHead>
-                      <TableHead className="text-center">Kabur</TableHead>
-                      <TableHead className="text-center">Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {dashboardData?.ketidakhadiranPerKelas.map((k) => (
-                      <TableRow key={k.kelasId}>
-                        <TableCell className="font-medium">{k.kelas}</TableCell>
-                        <TableCell>
-                          <Badge variant={k.shift === 'PAGI' ? 'default' : 'secondary'}>
-                            {k.shift}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {k.sakit > 0 && <Badge variant="outline" className="bg-yellow-50">{k.sakit}</Badge>}
-                          {k.sakit === 0 && '-'}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {k.izin > 0 && <Badge variant="outline" className="bg-blue-50">{k.izin}</Badge>}
-                          {k.izin === 0 && '-'}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {k.alfa > 0 && <Badge variant="outline" className="bg-red-50">{k.alfa}</Badge>}
-                          {k.alfa === 0 && '-'}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {k.kabur > 0 && <Badge variant="outline" className="bg-orange-50">{k.kabur}</Badge>}
-                          {k.kabur === 0 && '-'}
-                        </TableCell>
-                        <TableCell className="text-center font-bold">
-                          {k.sakit + k.izin + k.alfa + k.kabur}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    {(!dashboardData?.ketidakhadiranPerKelas || dashboardData.ketidakhadiranPerKelas.length === 0) && (
-                      <TableRow>
-                        <TableCell colSpan={7} className="text-center text-gray-500">
-                          Belum ada data
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
+                {(() => {
+                  // Get list of absent students
+                  const siswaTidakHadir = siswaList
+                    .filter(s => {
+                      const status = kehadiranSiswaList[s.id];
+                      return status && status !== 'HADIR';
+                    })
+                    .map(s => ({
+                      id: s.id,
+                      nama: s.nama,
+                      kelas: s.kelas?.nama || kelasList.find(k => k.id === s.kelasId)?.nama || '-',
+                      shift: s.kelas?.shift || kelasList.find(k => k.id === s.kelasId)?.shift || '-',
+                      status: kehadiranSiswaList[s.id],
+                      keterangan: keteranganSiswa[s.id] || '-'
+                    }))
+                    .sort((a, b) => {
+                      // Sort by shift first, then by kelas, then by nama
+                      if (a.shift !== b.shift) return a.shift.localeCompare(b.shift);
+                      if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
+                      return a.nama.localeCompare(b.nama);
+                    });
+
+                  // Status badge helper
+                  const getStatusBadge = (status: string) => {
+                    switch (status) {
+                      case 'SAKIT':
+                        return <Badge className="bg-yellow-500">Sakit</Badge>;
+                      case 'IZIN':
+                        return <Badge className="bg-blue-500">Izin</Badge>;
+                      case 'ALFA':
+                        return <Badge className="bg-red-500">Alfa</Badge>;
+                      case 'KABUR':
+                        return <Badge className="bg-orange-500">Kabur</Badge>;
+                      default:
+                        return <Badge variant="outline">{status}</Badge>;
+                    }
+                  };
+
+                  if (siswaTidakHadir.length === 0) {
+                    return (
+                      <div className="text-center py-8 text-gray-500">
+                        <CheckCircle2 className="w-12 h-12 mx-auto mb-2 text-green-500" />
+                        <p>Semua siswa hadir hari ini</p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <ScrollArea className="h-64">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-10">No</TableHead>
+                            <TableHead>Nama Siswa</TableHead>
+                            <TableHead className="text-center">Kelas</TableHead>
+                            <TableHead className="text-center">Shift</TableHead>
+                            <TableHead className="text-center">Status</TableHead>
+                            <TableHead>Keterangan</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {siswaTidakHadir.map((s, idx) => (
+                            <TableRow key={s.id} className={
+                              s.status === 'SAKIT' ? 'bg-yellow-50' :
+                              s.status === 'IZIN' ? 'bg-blue-50' :
+                              s.status === 'ALFA' ? 'bg-red-50' :
+                              'bg-orange-50'
+                            }>
+                              <TableCell>{idx + 1}</TableCell>
+                              <TableCell className="font-medium">{s.nama}</TableCell>
+                              <TableCell className="text-center">
+                                <Badge variant="outline">{s.kelas}</Badge>
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <Badge variant={s.shift === 'PAGI' ? 'default' : 'secondary'} className={s.shift === 'PAGI' ? 'bg-amber-600' : 'bg-blue-600'}>
+                                  {s.shift}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="text-center">
+                                {getStatusBadge(s.status)}
+                              </TableCell>
+                              <TableCell className="text-sm text-gray-600">{s.keterangan}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </ScrollArea>
+                  );
+                })()}
               </CardContent>
             </Card>
           </TabsContent>
@@ -1731,16 +2369,6 @@ export default function Home() {
                 <p className="text-gray-500">Daftar Hadir Jam Tatap Muka PNS, GTY, GTT</p>
               </div>
               <div className="flex items-center gap-2">
-                <Select value={selectedHari} onValueChange={setSelectedHari}>
-                  <SelectTrigger className="w-28">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {HARI.slice(1).map((h) => (
-                      <SelectItem key={h} value={h}>{h}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
                 <Select value={selectedShift || 'all'} onValueChange={(v) => setSelectedShift(v === 'all' ? '' : v)}>
                   <SelectTrigger className="w-28">
                     <SelectValue placeholder="Shift" />
@@ -1767,10 +2395,6 @@ export default function Home() {
                     />
                   </PopoverContent>
                 </Popover>
-                <Button onClick={saveKehadiranGuru} className="gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Simpan
-                </Button>
                 <Button variant="outline" onClick={exportMonitoringToXLSX} className="gap-2">
                   <Download className="w-4 h-4" />
                   Export XLSX
@@ -1792,6 +2416,29 @@ export default function Home() {
                   <p>Hari: <strong>{selectedHari}</strong>, Tanggal: <strong>{mounted ? format(selectedDate, 'd MMMM yyyy', { locale: id }) : ''}</strong></p>
                   <p>Shift: <strong>{selectedShift || 'Semua'}</strong></p>
                 </div>
+                {/* Guru Piket Info */}
+                <div className="mt-3 pt-3 border-t flex justify-center gap-8">
+                  {(() => {
+                    const piketPagi = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'PAGI');
+                    const piketSiang = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'SIANG');
+                    return (
+                      <>
+                        <div className="text-xs">
+                          <span className="text-gray-500">Guru Piket Pagi: </span>
+                          <span className="font-semibold text-amber-700">
+                            {piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '-'}
+                          </span>
+                        </div>
+                        <div className="text-xs">
+                          <span className="text-gray-500">Guru Piket Siang: </span>
+                          <span className="font-semibold text-blue-700">
+                            {piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '-'}
+                          </span>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
               </CardHeader>
               <CardContent className="p-0">
                 <ScrollArea className="h-auto">
@@ -1801,8 +2448,8 @@ export default function Home() {
                         <TableRow className="bg-gray-100">
                           <TableHead className="border text-center w-12">No</TableHead>
                           <TableHead className="border text-center min-w-40">Nama Guru</TableHead>
-                          {Array.from({ length: 10 }, (_, i) => i + 1).map(jam => (
-                            <TableHead key={jam} className="border text-center w-16">Jam {jam}</TableHead>
+                          {Array.from({ length: getMaxJamForMonitoring() }, (_, i) => i + 1).map(jam => (
+                            <TableHead key={jam} className="border text-center w-16">Jam ke-{jam}</TableHead>
                           ))}
                           <TableHead className="border text-center w-16">H</TableHead>
                           <TableHead className="border text-center w-16">TH</TableHead>
@@ -1811,30 +2458,35 @@ export default function Home() {
                       <TableBody>
                         {getGuruMengajarHariIni().map((guru, idx) => {
                           const jadwalGuru = getJadwalByGuru(guru.id);
+                          // Default is HADIR, only TIDAK_HADIR if explicitly marked
                           const totalHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length;
                           const totalTidakHadir = jadwalGuru.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR').length;
-                          
+
                           return (
                             <TableRow key={guru.id} className="hover:bg-gray-50">
                               <TableCell className="border text-center">{idx + 1}</TableCell>
                               <TableCell className="border font-medium">{guru.nama} {guru.gelar}</TableCell>
-                              {Array.from({ length: 10 }, (_, i) => i + 1).map(jam => {
+                              {Array.from({ length: getMaxJamForMonitoring() }, (_, i) => i + 1).map(jam => {
                                 const jadwal = jadwalGuru.find(j => j.jamKe === jam);
                                 if (!jadwal) {
                                   return <TableCell key={jam} className="border text-center bg-gray-50 text-gray-400">-</TableCell>;
                                 }
+                                // Default is HADIR (green), only TIDAK_HADIR (red) if explicitly marked
                                 const tidakHadir = kehadiranGuruList[jadwal.id] === 'TIDAK_HADIR';
+                                const newStatus = tidakHadir ? 'HADIR' : 'TIDAK_HADIR';
                                 return (
-                                  <TableCell 
-                                    key={jam} 
-                                    className={`border text-center cursor-pointer font-bold text-xs ${tidakHadir ? 'bg-red-100 text-red-600' : 'bg-green-50 text-green-700'}`}
-                                    onClick={() => {
+                                  <TableCell
+                                    key={jam}
+                                    className={`border text-center cursor-pointer font-bold text-xs transition-colors ${tidakHadir ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-green-50 text-green-700 hover:bg-green-100'}`}
+                                    onClick={async () => {
                                       setKehadiranGuruList(prev => ({
                                         ...prev,
-                                        [jadwal.id]: prev[jadwal.id] === 'TIDAK_HADIR' ? 'HADIR' : 'TIDAK_HADIR'
+                                        [jadwal.id]: newStatus
                                       }));
+                                      // Autosave - only save when marking as TIDAK_HADIR or reverting to HADIR from TIDAK_HADIR
+                                      await autosaveKehadiranGuru(jadwal.id, newStatus);
                                     }}
-                                    title={`${jadwal.mapel?.nama} - ${jadwal.kelas?.nama}`}
+                                    title={`${jadwal.mapel?.nama || ''} - ${jadwal.kelas?.nama} | ${jadwal.waktuMulai}-${jadwal.waktuSelesai} | Klik untuk toggle hadir/tidak hadir`}
                                   >
                                     {jadwal.kelas?.nama}
                                   </TableCell>
@@ -1847,8 +2499,8 @@ export default function Home() {
                         })}
                         {getGuruMengajarHariIni().length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={14} className="border text-center text-gray-500 py-8">
-                              Tidak ada jadwal mengajar pada hari {selectedHari}
+                            <TableCell colSpan={getMaxJamForMonitoring() + 4} className="border text-center text-gray-500 py-8">
+                              Tidak ada jadwal mengajar pada hari {selectedHari} {selectedShift ? `shift ${selectedShift}` : ''}
                             </TableCell>
                           </TableRow>
                         )}
@@ -1862,7 +2514,18 @@ export default function Home() {
             {/* Keterangan Guru Tidak Hadir */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-red-600">Keterangan Guru Tidak Hadir</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-red-600 flex items-center gap-2">
+                    <XCircle className="w-5 h-5" />
+                    Keterangan Guru Tidak Hadir
+                  </CardTitle>
+                  {Object.values(kehadiranGuruList).filter(s => s === 'TIDAK_HADIR').length > 0 && (
+                    <Button onClick={saveKehadiranGuru} className="gap-2">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Simpan Keterangan
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -1876,7 +2539,7 @@ export default function Home() {
                           <div className="flex-1">
                             <span className="font-medium">{jadwal.guru?.nama} {jadwal.guru?.gelar}</span>
                             <div className="text-sm text-gray-600">
-                              Jam {jadwal.jamKe} | Kelas {jadwal.kelas?.nama}
+                              Jam ke-{jadwal.jamKe} | Kelas {jadwal.kelas?.nama} | {jadwal.kelas?.shift}
                             </div>
                           </div>
                           <Input
@@ -1950,7 +2613,55 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Jadwal Guru Berdasarkan Shift */}
+            {/* Info Hari/Tanggal dari Monitoring */}
+            <Card className="border-2 border-primary/20">
+              <CardContent className="py-4">
+                <div className="flex items-center justify-center gap-4 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="w-5 h-5 text-primary" />
+                    <div className="text-center">
+                      <div className="text-sm text-gray-500">Hari</div>
+                      <div className="font-bold text-lg">{selectedHari}</div>
+                    </div>
+                  </div>
+                  <div className="w-px h-10 bg-gray-300" />
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary" />
+                    <div className="text-center">
+                      <div className="text-sm text-gray-500">Tanggal</div>
+                      <div className="font-bold text-lg">
+                        {mounted ? format(selectedDate, 'd MMMM yyyy', { locale: id }) : 'Loading...'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Guru Piket Info */}
+                <div className="mt-3 pt-3 border-t flex justify-center gap-6 flex-wrap">
+                  {(() => {
+                    const piketPagi = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'PAGI');
+                    const piketSiang = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'SIANG');
+                    return (
+                      <>
+                        <div className="text-sm">
+                          <span className="text-gray-500">Guru Piket Pagi: </span>
+                          <span className="font-semibold text-amber-700">
+                            {piketPagi?.guru ? `${piketPagi.guru.nama} ${piketPagi.guru.gelar || ''}` : '-'}
+                          </span>
+                        </div>
+                        <div className="text-sm">
+                          <span className="text-gray-500">Guru Piket Siang: </span>
+                          <span className="font-semibold text-blue-700">
+                            {piketSiang?.guru ? `${piketSiang.guru.nama} ${piketSiang.guru.gelar || ''}` : '-'}
+                          </span>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Rekap Kehadiran Guru Per Shift */}
             <div className="space-y-4">
               {/* Shift PAGI */}
               <Card>
@@ -1958,10 +2669,10 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-amber-800">
                       <Clock className="w-5 h-5" />
-                      SHIFT PAGI
+                      REKAP KEHADIRAN GURU - SHIFT PAGI
                     </CardTitle>
                     <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
-                      06:30 - 12:00 WIB
+                      07:00 - 12:30 WIB
                     </Badge>
                   </div>
                   <CardDescription>
@@ -1969,44 +2680,82 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="h-72">
+                  <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-gray-50">
-                          <TableHead className="border">Jam</TableHead>
-                          <TableHead className="border">Guru</TableHead>
-                          <TableHead className="border">Kelas</TableHead>
-                          <TableHead className="border">Status</TableHead>
+                          <TableHead className="border text-center w-12">No</TableHead>
+                          <TableHead className="border">Nama Guru</TableHead>
+                          <TableHead className="border text-center w-24">Total Jam</TableHead>
+                          <TableHead className="border text-center w-24">Hadir</TableHead>
+                          <TableHead className="border text-center w-24">Tidak Hadir</TableHead>
+                          <TableHead className="border">Keterangan</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {dashboardData?.jadwalHariIni
-                          .filter((j) => j.kelas?.shift === 'PAGI')
-                          .sort((a, b) => a.jamKe - b.jamKe)
-                          .map((j) => (
-                            <TableRow key={j.id}>
-                              <TableCell className="border text-xs">{j.waktuMulai}-{j.waktuSelesai}</TableCell>
-                              <TableCell className="border">{j.guru?.nama}</TableCell>
-                              <TableCell className="border"><Badge variant="outline">{j.kelas?.nama}</Badge></TableCell>
-                              <TableCell className="border">
-                                {kehadiranGuruList[j.id] === 'TIDAK_HADIR' ? (
-                                  <Badge variant="destructive">Tidak Hadir</Badge>
-                                ) : (
-                                  <Badge variant="default" className="bg-green-600">Hadir</Badge>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        {dashboardData?.jadwalHariIni.filter((j) => j.kelas?.shift === 'PAGI').length === 0 && (
-                          <TableRow>
-                            <TableCell colSpan={4} className="border text-center text-gray-500 py-8">
-                              Tidak ada jadwal shift pagi
-                            </TableCell>
-                          </TableRow>
-                        )}
+                        {(() => {
+                          // Get unique teachers for PAGI shift and their stats
+                          const jadwalPagi = jadwalList.filter((j) => j.hari === selectedHari && j.kelas?.shift === 'PAGI');
+                          const guruMap = new Map<string, { guru: Guru; jadwal: Jadwal[] }>();
+                          
+                          jadwalPagi.forEach((j) => {
+                            if (!guruMap.has(j.guruId)) {
+                              guruMap.set(j.guruId, { guru: j.guru!, jadwal: [] });
+                            }
+                            guruMap.get(j.guruId)!.jadwal.push(j);
+                          });
+                          
+                          const guruListPagi = Array.from(guruMap.values()).sort((a, b) => 
+                            a.guru.nama.localeCompare(b.guru.nama)
+                          );
+                          
+                          if (guruListPagi.length === 0) {
+                            return (
+                              <TableRow>
+                                <TableCell colSpan={6} className="border text-center text-gray-500 py-8">
+                                  Tidak ada jadwal shift pagi
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                          
+                          return guruListPagi.map(({ guru, jadwal }, idx) => {
+                            const totalJam = jadwal.length;
+                            const jadwalTidakHadir = jadwal.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR');
+                            const totalTidakHadir = jadwalTidakHadir.length;
+                            const totalHadir = totalJam - totalTidakHadir;
+                            
+                            // Get alasan for each tidak hadir
+                            const alasanList = jadwalTidakHadir.map(j => {
+                              const alasan = keteranganGuru[j.id];
+                              return alasan ? `Jam ${j.jamKe}: ${alasan}` : `Jam ${j.jamKe}`;
+                            }).join(', ');
+                            
+                            return (
+                              <TableRow key={guru.id}>
+                                <TableCell className="border text-center">{idx + 1}</TableCell>
+                                <TableCell className="border font-medium">{guru.nama} {guru.gelar}</TableCell>
+                                <TableCell className="border text-center">{totalJam}</TableCell>
+                                <TableCell className="border text-center">
+                                  <Badge variant="default" className="bg-green-600">{totalHadir}</Badge>
+                                </TableCell>
+                                <TableCell className="border text-center">
+                                  {totalTidakHadir > 0 ? (
+                                    <Badge variant="destructive">{totalTidakHadir}</Badge>
+                                  ) : (
+                                    <span className="text-gray-400">0</span>
+                                  )}
+                                </TableCell>
+                                <TableCell className="border text-sm text-gray-600">
+                                  {alasanList || <span className="text-gray-400">-</span>}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          });
+                        })()}
                       </TableBody>
                     </Table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -2016,146 +2765,129 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-blue-800">
                       <Clock className="w-5 h-5" />
-                      SHIFT SIANG
+                      REKAP KEHADIRAN GURU - SHIFT SIANG
                     </CardTitle>
                     <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">
                       12:40 - 17:00 WIB
                     </Badge>
                   </div>
                   <CardDescription>
-                    Kelas 7A, 7B, 7C, 7D, 8A, 8B, 8C, 8D
+                    Kelas 7A, 7B, 8A, 8B, 8C
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="h-72">
+                  <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-gray-50">
-                          <TableHead className="border">Jam</TableHead>
-                          <TableHead className="border">Guru</TableHead>
-                          <TableHead className="border">Kelas</TableHead>
-                          <TableHead className="border">Status</TableHead>
+                          <TableHead className="border text-center w-12">No</TableHead>
+                          <TableHead className="border">Nama Guru</TableHead>
+                          <TableHead className="border text-center w-24">Total Jam</TableHead>
+                          <TableHead className="border text-center w-24">Hadir</TableHead>
+                          <TableHead className="border text-center w-24">Tidak Hadir</TableHead>
+                          <TableHead className="border">Keterangan</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {dashboardData?.jadwalHariIni
-                          .filter((j) => j.kelas?.shift === 'SIANG')
-                          .sort((a, b) => a.jamKe - b.jamKe)
-                          .map((j) => (
-                            <TableRow key={j.id}>
-                              <TableCell className="border text-xs">{j.waktuMulai}-{j.waktuSelesai}</TableCell>
-                              <TableCell className="border">{j.guru?.nama}</TableCell>
-                              <TableCell className="border"><Badge variant="outline">{j.kelas?.nama}</Badge></TableCell>
-                              <TableCell className="border">
-                                {kehadiranGuruList[j.id] === 'TIDAK_HADIR' ? (
-                                  <Badge variant="destructive">Tidak Hadir</Badge>
-                                ) : (
-                                  <Badge variant="default" className="bg-green-600">Hadir</Badge>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        {dashboardData?.jadwalHariIni.filter((j) => j.kelas?.shift === 'SIANG').length === 0 && (
-                          <TableRow>
-                            <TableCell colSpan={4} className="border text-center text-gray-500 py-8">
-                              Tidak ada jadwal shift siang
-                            </TableCell>
-                          </TableRow>
-                        )}
+                        {(() => {
+                          // Get unique teachers for SIANG shift and their stats
+                          const jadwalSiang = jadwalList.filter((j) => j.hari === selectedHari && j.kelas?.shift === 'SIANG');
+                          const guruMap = new Map<string, { guru: Guru; jadwal: Jadwal[] }>();
+                          
+                          jadwalSiang.forEach((j) => {
+                            if (!guruMap.has(j.guruId)) {
+                              guruMap.set(j.guruId, { guru: j.guru!, jadwal: [] });
+                            }
+                            guruMap.get(j.guruId)!.jadwal.push(j);
+                          });
+                          
+                          const guruListSiang = Array.from(guruMap.values()).sort((a, b) => 
+                            a.guru.nama.localeCompare(b.guru.nama)
+                          );
+                          
+                          if (guruListSiang.length === 0) {
+                            return (
+                              <TableRow>
+                                <TableCell colSpan={6} className="border text-center text-gray-500 py-8">
+                                  Tidak ada jadwal shift siang
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                          
+                          return guruListSiang.map(({ guru, jadwal }, idx) => {
+                            const totalJam = jadwal.length;
+                            const jadwalTidakHadir = jadwal.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR');
+                            const totalTidakHadir = jadwalTidakHadir.length;
+                            const totalHadir = totalJam - totalTidakHadir;
+                            
+                            // Get alasan for each tidak hadir
+                            const alasanList = jadwalTidakHadir.map(j => {
+                              const alasan = keteranganGuru[j.id];
+                              return alasan ? `Jam ${j.jamKe}: ${alasan}` : `Jam ${j.jamKe}`;
+                            }).join(', ');
+                            
+                            return (
+                              <TableRow key={guru.id}>
+                                <TableCell className="border text-center">{idx + 1}</TableCell>
+                                <TableCell className="border font-medium">{guru.nama} {guru.gelar}</TableCell>
+                                <TableCell className="border text-center">{totalJam}</TableCell>
+                                <TableCell className="border text-center">
+                                  <Badge variant="default" className="bg-green-600">{totalHadir}</Badge>
+                                </TableCell>
+                                <TableCell className="border text-center">
+                                  {totalTidakHadir > 0 ? (
+                                    <Badge variant="destructive">{totalTidakHadir}</Badge>
+                                  ) : (
+                                    <span className="text-gray-400">0</span>
+                                  )}
+                                </TableCell>
+                                <TableCell className="border text-sm text-gray-600">
+                                  {alasanList || <span className="text-gray-400">-</span>}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          });
+                        })()}
                       </TableBody>
                     </Table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
-              {/* Guru Berhalangan */}
+              {/* Ringkasan Kehadiran Guru */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-red-600 flex items-center gap-2">
-                    <XCircle className="w-5 h-5" />
-                    Guru Berhalangan Hadir
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Ringkasan Kehadiran Guru Hari Ini
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Tidak Hadir Shift Pagi */}
-                    <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
-                      <h4 className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        Shift Pagi
-                      </h4>
-                      <div className="space-y-2">
-                        {Object.entries(kehadiranGuruList)
-                          .filter(([jadwalId, status]) => {
-                            const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                            return status === 'TIDAK_HADIR' && jadwal?.kelas?.shift === 'PAGI';
-                          })
-                          .map(([jadwalId, _]) => {
-                            const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                            if (!jadwal) return null;
-                            return (
-                              <div key={jadwalId} className="p-2 border rounded bg-white border-amber-200">
-                                <div className="font-medium text-sm">{jadwal.guru?.nama} {jadwal.guru?.gelar}</div>
-                                <div className="text-xs text-gray-600">
-                                  Kelas {jadwal.kelas?.nama} | Jam {jadwal.jamKe}
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  <strong>Alasan:</strong> {keteranganGuru[jadwalId] || '-'}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        {Object.entries(kehadiranGuruList).filter(([jadwalId, status]) => {
-                          const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                          return status === 'TIDAK_HADIR' && jadwal?.kelas?.shift === 'PAGI';
-                        }).length === 0 && (
-                          <div className="text-center text-gray-500 py-4 text-sm">
-                            <CheckCircle2 className="w-8 h-8 mx-auto mb-1 text-green-500" />
-                            <p>Semua guru hadir</p>
-                          </div>
-                        )}
+                  {(() => {
+                    const jadwalHariIni = jadwalList.filter((j) => j.hari === selectedHari);
+                    const totalJadwal = jadwalHariIni.length;
+                    // Default is HADIR, only count as TIDAK_HADIR if explicitly marked
+                    const totalHadir = jadwalHariIni.filter(j => kehadiranGuruList[j.id] !== 'TIDAK_HADIR').length;
+                    const totalTidakHadir = jadwalHariIni.filter(j => kehadiranGuruList[j.id] === 'TIDAK_HADIR').length;
+                    
+                    return (
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="text-center p-4 bg-gray-50 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700">{totalJadwal}</div>
+                          <div className="text-sm text-gray-500">Total Jadwal</div>
+                        </div>
+                        <div className="text-center p-4 bg-green-50 rounded-lg">
+                          <div className="text-2xl font-bold text-green-600">{totalHadir}</div>
+                          <div className="text-sm text-gray-500">Total Hadir</div>
+                        </div>
+                        <div className="text-center p-4 bg-red-50 rounded-lg">
+                          <div className="text-2xl font-bold text-red-600">{totalTidakHadir}</div>
+                          <div className="text-sm text-gray-500">Total Tidak Hadir</div>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Tidak Hadir Shift Siang */}
-                    <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
-                      <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        Shift Siang
-                      </h4>
-                      <div className="space-y-2">
-                        {Object.entries(kehadiranGuruList)
-                          .filter(([jadwalId, status]) => {
-                            const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                            return status === 'TIDAK_HADIR' && jadwal?.kelas?.shift === 'SIANG';
-                          })
-                          .map(([jadwalId, _]) => {
-                            const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                            if (!jadwal) return null;
-                            return (
-                              <div key={jadwalId} className="p-2 border rounded bg-white border-blue-200">
-                                <div className="font-medium text-sm">{jadwal.guru?.nama} {jadwal.guru?.gelar}</div>
-                                <div className="text-xs text-gray-600">
-                                  Kelas {jadwal.kelas?.nama} | Jam {jadwal.jamKe}
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  <strong>Alasan:</strong> {keteranganGuru[jadwalId] || '-'}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        {Object.entries(kehadiranGuruList).filter(([jadwalId, status]) => {
-                          const jadwal = dashboardData?.jadwalHariIni.find(j => j.id === jadwalId);
-                          return status === 'TIDAK_HADIR' && jadwal?.kelas?.shift === 'SIANG';
-                        }).length === 0 && (
-                          <div className="text-center text-gray-500 py-4 text-sm">
-                            <CheckCircle2 className="w-8 h-8 mx-auto mb-1 text-green-500" />
-                            <p>Semua guru hadir</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })()}
                 </CardContent>
               </Card>
             </div>
@@ -2166,7 +2898,7 @@ export default function Home() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Input Ketidakhadiran Siswa</CardTitle>
-                    <CardDescription>Pilih kelas dan input ketidakhadiran siswa</CardDescription>
+                    <CardDescription>Pilih shift, kelas dan input ketidakhadiran siswa</CardDescription>
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <div className="relative">
@@ -2178,17 +2910,29 @@ export default function Home() {
                         onChange={(e) => setSearchSiswa(e.target.value)}
                       />
                     </div>
+                    <Select value={selectedShiftSiswa || 'all'} onValueChange={(v) => setSelectedShiftSiswa(v === 'all' ? '' : v)}>
+                      <SelectTrigger className="w-28">
+                        <SelectValue placeholder="Shift" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Semua Shift</SelectItem>
+                        <SelectItem value="PAGI">Pagi</SelectItem>
+                        <SelectItem value="SIANG">Siang</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <Select value={selectedKelas} onValueChange={setSelectedKelas}>
                       <SelectTrigger className="w-40">
                         <SelectValue placeholder="Pilih Kelas" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">Semua Kelas</SelectItem>
-                        {kelasList.map((k) => (
-                          <SelectItem key={k.id} value={k.id}>
-                            {k.nama} ({k.shift})
-                          </SelectItem>
-                        ))}
+                        {kelasList
+                          .filter(k => !selectedShiftSiswa || k.shift === selectedShiftSiswa)
+                          .map((k) => (
+                            <SelectItem key={k.id} value={k.id}>
+                              {k.nama} ({k.shift})
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <Button onClick={saveKehadiranSiswa} className="gap-2">
@@ -2230,8 +2974,9 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-80">
-                  <Table>
-                    <TableHeader>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
                       <TableRow>
                         <TableHead className="w-10">
                           <Checkbox
@@ -2239,7 +2984,8 @@ export default function Home() {
                               const filteredSiswa = siswaList.filter(s => {
                                 const matchSearch = s.nama.toLowerCase().includes(searchSiswa.toLowerCase());
                                 const matchKelas = selectedKelas && selectedKelas !== 'all' ? s.kelasId === selectedKelas : true;
-                                return matchSearch && matchKelas;
+                                const matchShift = selectedShiftSiswa ? s.kelas?.shift === selectedShiftSiswa : true;
+                                return matchSearch && matchKelas && matchShift;
                               });
                               return filteredSiswa.length > 0 && selectedSiswaIds.size === filteredSiswa.length;
                             })()}
@@ -2247,7 +2993,8 @@ export default function Home() {
                               const filteredSiswa = siswaList.filter(s => {
                                 const matchSearch = s.nama.toLowerCase().includes(searchSiswa.toLowerCase());
                                 const matchKelas = selectedKelas && selectedKelas !== 'all' ? s.kelasId === selectedKelas : true;
-                                return matchSearch && matchKelas;
+                                const matchShift = selectedShiftSiswa ? s.kelas?.shift === selectedShiftSiswa : true;
+                                return matchSearch && matchKelas && matchShift;
                               });
                               toggleSelectAllSiswa(filteredSiswa);
                             }}
@@ -2256,6 +3003,7 @@ export default function Home() {
                         <TableHead>No</TableHead>
                         <TableHead>Nama Siswa</TableHead>
                         <TableHead>Kelas</TableHead>
+                        <TableHead>Shift</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Keterangan</TableHead>
                       </TableRow>
@@ -2265,7 +3013,8 @@ export default function Home() {
                         .filter(s => {
                           const matchSearch = s.nama.toLowerCase().includes(searchSiswa.toLowerCase());
                           const matchKelas = selectedKelas && selectedKelas !== 'all' ? s.kelasId === selectedKelas : true;
-                          return matchSearch && matchKelas;
+                          const matchShift = selectedShiftSiswa ? s.kelas?.shift === selectedShiftSiswa : true;
+                          return matchSearch && matchKelas && matchShift;
                         })
                         .map((siswa, idx) => (
                           <TableRow key={siswa.id} className={selectedSiswaIds.has(siswa.id) ? 'bg-blue-50' : ''}>
@@ -2280,6 +3029,11 @@ export default function Home() {
                             <TableCell>
                               <Badge variant="outline">
                                 {siswa.kelas?.nama || kelasList.find(k => k.id === siswa.kelasId)?.nama || '-'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={siswa.kelas?.shift === 'PAGI' ? 'default' : 'secondary'}>
+                                {siswa.kelas?.shift || kelasList.find(k => k.id === siswa.kelasId)?.shift || '-'}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -2317,18 +3071,284 @@ export default function Home() {
                       {siswaList.filter(s => {
                         const matchSearch = s.nama.toLowerCase().includes(searchSiswa.toLowerCase());
                         const matchKelas = selectedKelas && selectedKelas !== 'all' ? s.kelasId === selectedKelas : true;
-                        return matchSearch && matchKelas;
+                        const matchShift = selectedShiftSiswa ? s.kelas?.shift === selectedShiftSiswa : true;
+                        return matchSearch && matchKelas && matchShift;
                       }).length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={5} className="text-center text-gray-500 py-8">
+                          <TableCell colSpan={7} className="text-center text-gray-500 py-8">
                             <Users className="w-12 h-12 mx-auto mb-2" />
-                            <p>{searchSiswa ? 'Siswa tidak ditemukan' : 'Pilih kelas atau ketik nama siswa untuk mencari'}</p>
+                            <p>{searchSiswa ? 'Siswa tidak ditemukan' : 'Pilih shift/kelas atau ketik nama siswa untuk mencari'}</p>
                           </TableCell>
                         </TableRow>
                       )}
                     </TableBody>
                   </Table>
+                  </div>
                 </ScrollArea>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Jadwal Piket Tab */}
+          <TabsContent value="jadwalpiket" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Jadwal Piket</h2>
+                <p className="text-gray-500">Kelola jadwal guru piket per hari dan shift</p>
+              </div>
+            </div>
+
+            {/* Tabel Jadwal Piket */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Jadwal Piket Mingguan</CardTitle>
+                <CardDescription>Atur guru piket untuk setiap hari dan shift</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-center">Hari</TableHead>
+                        <TableHead className="text-center bg-amber-50">Shift Pagi</TableHead>
+                        <TableHead className="text-center bg-blue-50">Shift Siang</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {HARI.slice(1).map((hari) => {
+                        const piketPagi = jadwalPiketList.find(p => p.hari === hari && p.shift === 'PAGI');
+                        const piketSiang = jadwalPiketList.find(p => p.hari === hari && p.shift === 'SIANG');
+                        
+                        return (
+                          <TableRow key={hari}>
+                            <TableCell className="font-medium text-center">{hari}</TableCell>
+                            <TableCell className="bg-amber-50/30">
+                              <div className="flex items-center justify-center gap-2">
+                                <Select
+                                  value={piketPagi?.guruId || ''}
+                                  onValueChange={(guruId) => {
+                                    if (guruId) {
+                                      saveJadwalPiket(hari, 'PAGI', guruId);
+                                    }
+                                  }}
+                                >
+                                  <SelectTrigger className="w-48">
+                                    <SelectValue placeholder="Pilih Guru" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {guruList.map((g) => (
+                                      <SelectItem key={g.id} value={g.id}>
+                                        {g.nama} {g.gelar || ''}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {piketPagi && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => deleteJadwalPiket(piketPagi.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4 text-red-500" />
+                                  </Button>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell className="bg-blue-50/30">
+                              <div className="flex items-center justify-center gap-2">
+                                <Select
+                                  value={piketSiang?.guruId || ''}
+                                  onValueChange={(guruId) => {
+                                    if (guruId) {
+                                      saveJadwalPiket(hari, 'SIANG', guruId);
+                                    }
+                                  }}
+                                >
+                                  <SelectTrigger className="w-48">
+                                    <SelectValue placeholder="Pilih Guru" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {guruList.map((g) => (
+                                      <SelectItem key={g.id} value={g.id}>
+                                        {g.nama} {g.gelar || ''}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {piketSiang && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => deleteJadwalPiket(piketSiang.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4 text-red-500" />
+                                  </Button>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Kehadiran Guru Piket Hari Ini */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Absensi Guru Piket</CardTitle>
+                    <CardDescription>
+                      {mounted ? format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id }) : ''} - {selectedHari}
+                    </CardDescription>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="gap-2">
+                        <CalendarIcon className="w-4 h-4" />
+                        {mounted ? format(selectedDate, 'd MMMM yyyy', { locale: id }) : 'Loading...'}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) => date && setSelectedDate(date)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Shift Pagi */}
+                  <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                        <span className="font-semibold text-amber-800">Shift Pagi</span>
+                      </div>
+                      <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
+                        07:00 - 12:30
+                      </Badge>
+                    </div>
+                    {(() => {
+                      const piketPagi = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'PAGI');
+                      if (!piketPagi?.guru) {
+                        return <span className="text-gray-500">Belum ada guru piket untuk shift ini</span>;
+                      }
+                      const key = `${piketPagi.guruId}_PAGI`;
+                      const status = kehadiranGuruPiketList[key] || '';
+                      
+                      return (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{piketPagi.guru.nama} {piketPagi.guru.gelar || ''}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant={status === 'HADIR' ? 'default' : 'outline'}
+                              size="sm"
+                              className={status === 'HADIR' ? 'bg-green-600 hover:bg-green-700' : ''}
+                              onClick={() => saveKehadiranGuruPiket(piketPagi.guruId!, 'PAGI', 'HADIR')}
+                            >
+                              <CheckCircle2 className="w-4 h-4 mr-1" />
+                              Hadir
+                            </Button>
+                            <Button
+                              variant={status === 'TIDAK_HADIR' ? 'destructive' : 'outline'}
+                              size="sm"
+                              onClick={() => saveKehadiranGuruPiket(piketPagi.guruId!, 'PAGI', 'TIDAK_HADIR', keteranganGuruPiket[key])}
+                            >
+                              <XCircle className="w-4 h-4 mr-1" />
+                              Tidak Hadir
+                            </Button>
+                          </div>
+                          {status === 'TIDAK_HADIR' && (
+                            <Input
+                              placeholder="Keterangan..."
+                              value={keteranganGuruPiket[key] || ''}
+                              onChange={(e) => {
+                                setKeteranganGuruPiket(prev => ({
+                                  ...prev,
+                                  [key]: e.target.value
+                                }));
+                              }}
+                              onBlur={() => saveKehadiranGuruPiket(piketPagi.guruId!, 'PAGI', 'TIDAK_HADIR', keteranganGuruPiket[key])}
+                            />
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  
+                  {/* Shift Siang */}
+                  <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-blue-600" />
+                        <span className="font-semibold text-blue-800">Shift Siang</span>
+                      </div>
+                      <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">
+                        12:40 - 17:00
+                      </Badge>
+                    </div>
+                    {(() => {
+                      const piketSiang = jadwalPiketList.find(p => p.hari === selectedHari && p.shift === 'SIANG');
+                      if (!piketSiang?.guru) {
+                        return <span className="text-gray-500">Belum ada guru piket untuk shift ini</span>;
+                      }
+                      const key = `${piketSiang.guruId}_SIANG`;
+                      const status = kehadiranGuruPiketList[key] || '';
+                      
+                      return (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{piketSiang.guru.nama} {piketSiang.guru.gelar || ''}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant={status === 'HADIR' ? 'default' : 'outline'}
+                              size="sm"
+                              className={status === 'HADIR' ? 'bg-green-600 hover:bg-green-700' : ''}
+                              onClick={() => saveKehadiranGuruPiket(piketSiang.guruId!, 'SIANG', 'HADIR')}
+                            >
+                              <CheckCircle2 className="w-4 h-4 mr-1" />
+                              Hadir
+                            </Button>
+                            <Button
+                              variant={status === 'TIDAK_HADIR' ? 'destructive' : 'outline'}
+                              size="sm"
+                              onClick={() => saveKehadiranGuruPiket(piketSiang.guruId!, 'SIANG', 'TIDAK_HADIR', keteranganGuruPiket[key])}
+                            >
+                              <XCircle className="w-4 h-4 mr-1" />
+                              Tidak Hadir
+                            </Button>
+                          </div>
+                          {status === 'TIDAK_HADIR' && (
+                            <Input
+                              placeholder="Keterangan..."
+                              value={keteranganGuruPiket[key] || ''}
+                              onChange={(e) => {
+                                setKeteranganGuruPiket(prev => ({
+                                  ...prev,
+                                  [key]: e.target.value
+                                }));
+                              }}
+                              onBlur={() => saveKehadiranGuruPiket(piketSiang.guruId!, 'SIANG', 'TIDAK_HADIR', keteranganGuruPiket[key])}
+                            />
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -2360,13 +3380,14 @@ export default function Home() {
                     <SelectItem value="2026">2026</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={laporanTipe} onValueChange={(v) => setLaporanTipe(v as 'guru' | 'siswa')}>
+                <Select value={laporanTipe} onValueChange={(v) => setLaporanTipe(v as 'guru' | 'siswa' | 'piket')}>
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="guru">Kehadiran Guru</SelectItem>
                     <SelectItem value="siswa">Kehadiran Siswa</SelectItem>
+                    <SelectItem value="piket">Guru Piket</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button onClick={fetchLaporan} className="gap-2">
@@ -2379,68 +3400,146 @@ export default function Home() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  Rekap {laporanTipe === 'guru' ? 'Kehadiran Guru' : 'Kehadiran Siswa'} - {BULAN[laporanBulan - 1]} {laporanTahun}
+                  Rekap {laporanTipe === 'guru' ? 'Kehadiran Guru' : laporanTipe === 'siswa' ? 'Kehadiran Siswa' : 'Kehadiran Guru Piket'} - {BULAN[laporanBulan - 1]} {laporanTahun}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-96">
-                  {laporanTipe === 'guru' ? (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>No</TableHead>
-                          <TableHead>Kode</TableHead>
-                          <TableHead>Nama Guru</TableHead>
-                          <TableHead className="text-center">Total Jam</TableHead>
-                          <TableHead className="text-center">Hadir</TableHead>
-                          <TableHead className="text-center">Tidak Hadir</TableHead>
-                          <TableHead className="text-center">Persentase</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {(laporanData as Array<{ guru: Guru; totalJam: number; hadir: number; tidakHadir: number; persentase: string }>).map((item, idx) => (
-                          <TableRow key={item.guru?.id || idx}>
-                            <TableCell>{idx + 1}</TableCell>
-                            <TableCell>{item.guru?.kode}</TableCell>
-                            <TableCell>{item.guru?.nama} {item.guru?.gelar}</TableCell>
-                            <TableCell className="text-center">{item.totalJam}</TableCell>
-                            <TableCell className="text-center text-green-600 font-medium">{item.hadir}</TableCell>
-                            <TableCell className="text-center text-red-600 font-medium">{item.tidakHadir}</TableCell>
-                            <TableCell className="text-center font-bold">{item.persentase}%</TableCell>
+                  <div className="overflow-x-auto">
+                    {laporanTipe === 'guru' ? (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>No</TableHead>
+                            <TableHead>Kode</TableHead>
+                            <TableHead>Nama Guru</TableHead>
+                            <TableHead className="text-center">Total Jam</TableHead>
+                            <TableHead className="text-center">Hadir</TableHead>
+                            <TableHead className="text-center">Tidak Hadir</TableHead>
+                            <TableHead className="text-center">Persentase</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  ) : (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>No</TableHead>
-                          <TableHead>Nama Siswa</TableHead>
-                          <TableHead>Kelas</TableHead>
-                          <TableHead className="text-center">Hadir</TableHead>
-                          <TableHead className="text-center">Sakit</TableHead>
-                          <TableHead className="text-center">Izin</TableHead>
-                          <TableHead className="text-center">Alfa</TableHead>
-                          <TableHead className="text-center">Kabur</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {(laporanData as Array<{ siswa: Siswa; kelas: Kelas; hadir: number; sakit: number; izin: number; alfa: number; kabur: number }>).map((item, idx) => (
-                          <TableRow key={item.siswa?.id || idx}>
-                            <TableCell>{idx + 1}</TableCell>
-                            <TableCell>{item.siswa?.nama}</TableCell>
-                            <TableCell><Badge variant="outline">{item.kelas?.nama}</Badge></TableCell>
-                            <TableCell className="text-center text-green-600">{item.hadir}</TableCell>
-                            <TableCell className="text-center text-yellow-600">{item.sakit}</TableCell>
-                            <TableCell className="text-center text-blue-600">{item.izin}</TableCell>
-                            <TableCell className="text-center text-red-600">{item.alfa}</TableCell>
-                            <TableCell className="text-center text-orange-600">{item.kabur}</TableCell>
+                        </TableHeader>
+                        <TableBody>
+                          {(laporanData as Array<{ guru: Guru; totalJam: number; hadir: number; tidakHadir: number; persentase: string }>).map((item, idx) => (
+                            <TableRow key={item.guru?.id || idx}>
+                              <TableCell>{idx + 1}</TableCell>
+                              <TableCell>{item.guru?.kode}</TableCell>
+                              <TableCell>{item.guru?.nama} {item.guru?.gelar}</TableCell>
+                              <TableCell className="text-center">{item.totalJam}</TableCell>
+                              <TableCell className="text-center text-green-600 font-medium">{item.hadir}</TableCell>
+                              <TableCell className="text-center text-red-600 font-medium">{item.tidakHadir}</TableCell>
+                              <TableCell className="text-center font-bold">{item.persentase}%</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    ) : laporanTipe === 'siswa' ? (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>No</TableHead>
+                            <TableHead>Nama Siswa</TableHead>
+                            <TableHead>Kelas</TableHead>
+                            <TableHead className="text-center">Hadir</TableHead>
+                            <TableHead className="text-center">Sakit</TableHead>
+                            <TableHead className="text-center">Izin</TableHead>
+                            <TableHead className="text-center">Alfa</TableHead>
+                            <TableHead className="text-center">Kabur</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
+                        </TableHeader>
+                        <TableBody>
+                          {(laporanData as Array<{ siswa: Siswa; kelas: Kelas; hadir: number; sakit: number; izin: number; alfa: number; kabur: number }>).map((item, idx) => (
+                            <TableRow key={item.siswa?.id || idx}>
+                              <TableCell>{idx + 1}</TableCell>
+                              <TableCell>{item.siswa?.nama}</TableCell>
+                              <TableCell><Badge variant="outline">{item.kelas?.nama}</Badge></TableCell>
+                              <TableCell className="text-center text-green-600">{item.hadir}</TableCell>
+                              <TableCell className="text-center text-yellow-600">{item.sakit}</TableCell>
+                              <TableCell className="text-center text-blue-600">{item.izin}</TableCell>
+                              <TableCell className="text-center text-red-600">{item.alfa}</TableCell>
+                              <TableCell className="text-center text-orange-600">{item.kabur}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>No</TableHead>
+                            <TableHead>Nama Guru</TableHead>
+                            <TableHead className="text-center">Shift</TableHead>
+                            <TableHead className="text-center">Jadwal Piket</TableHead>
+                            <TableHead className="text-center">Hadir</TableHead>
+                            <TableHead className="text-center">Tidak Hadir</TableHead>
+                            <TableHead className="text-center">Persentase</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {jadwalPiketList.map((piket, idx) => {
+                            // Calculate attendance for this piket
+                            const piketGuruId = piket.guruId;
+                            const piketShift = piket.shift;
+                            
+                            // Get all days in the selected month
+                            const daysInMonth = new Date(laporanTahun, laporanBulan, 0).getDate();
+                            let hadir = 0;
+                            let tidakHadir = 0;
+                            
+                            // For each day in the month, check if this guru was scheduled and their attendance
+                            for (let day = 1; day <= daysInMonth; day++) {
+                              const date = new Date(laporanTahun, laporanBulan - 1, day);
+                              const dayOfWeek = date.getDay();
+                              const hariName = HARI[dayOfWeek];
+                              
+                              // Check if this is the right day
+                              if (hariName === piket.hari) {
+                                const key = `${piketGuruId}_${piketShift}`;
+                                const dateStr = format(date, 'yyyy-MM-dd');
+                                // Check attendance from dashboardData.kehadiranGuruPiket
+                                const kehadiran = dashboardData?.kehadiranGuruPiket?.find(
+                                  (k: KehadiranGuruPiket) => 
+                                    k.guruId === piketGuruId && 
+                                    k.shift === piketShift &&
+                                    format(new Date(k.tanggal), 'yyyy-MM-dd') === dateStr
+                                );
+                                if (kehadiran) {
+                                  if (kehadiran.status === 'HADIR') hadir++;
+                                  else tidakHadir++;
+                                }
+                              }
+                            }
+                            
+                            const total = hadir + tidakHadir;
+                            const persentase = total > 0 ? Math.round((hadir / total) * 100) : 0;
+                            
+                            return (
+                              <TableRow key={piket.id}>
+                                <TableCell>{idx + 1}</TableCell>
+                                <TableCell>{piket.guru?.nama} {piket.guru?.gelar || ''}</TableCell>
+                                <TableCell className="text-center">
+                                  <Badge variant={piket.shift === 'PAGI' ? 'default' : 'secondary'}>
+                                    {piket.shift}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="text-center">{piket.hari}</TableCell>
+                                <TableCell className="text-center text-green-600 font-medium">{hadir}</TableCell>
+                                <TableCell className="text-center text-red-600 font-medium">{tidakHadir}</TableCell>
+                                <TableCell className="text-center font-bold">{persentase}%</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                          {jadwalPiketList.length === 0 && (
+                            <TableRow>
+                              <TableCell colSpan={7} className="text-center text-gray-500 py-8">
+                                Belum ada jadwal piket
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </div>
                 </ScrollArea>
               </CardContent>
             </Card>
@@ -2599,37 +3698,6 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              {/* Tambah Guru ke Jadwal */}
-              <Card>
-                <CardHeader className="py-3">
-                  <CardTitle className="text-sm">Tambah Baris Guru</CardTitle>
-                </CardHeader>
-                <CardContent className="py-2">
-                  <div className="space-y-3">
-                    <Select onValueChange={(guruId) => {
-                      if (guruId && !jadwalMatrix[guruId]) {
-                        addGuruToMatrix(guruId);
-                      }
-                    }}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih guru..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {guruList
-                          .filter(g => !jadwalMatrix[g.id])
-                          .map((g) => (
-                            <SelectItem key={g.id} value={g.id}>
-                              {g.nama} {g.gelar}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-gray-500">
-                      Pilih guru untuk menambahkan baris baru ke jadwal
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
             {/* Jadwal Matrix */}
@@ -2670,7 +3738,7 @@ export default function Home() {
                   </div>
                 </div>
                 <CardDescription>
-                  {selectedShiftJadwal === 'PAGI' ? 'Jam: 06:30 - 12:00 WIB (Kelas 9A-9D)' : 'Jam: 12:40 - 17:00 WIB (Kelas 7A-7D, 8A-8D)'}
+                  {selectedShiftJadwal === 'PAGI' ? 'Jam: 07:00 - 12:30 WIB (Kelas 9A-9D, 9 Jam)' : 'Jam: 12:40 - 17:00 WIB (Kelas 7A-7D, 8A-8C, 8 Jam)'}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
@@ -2681,15 +3749,9 @@ export default function Home() {
                         <TableRow className="bg-gray-100">
                           <TableHead className="border text-center w-12 sticky left-0 bg-gray-100">No</TableHead>
                           <TableHead className="border min-w-48 sticky left-12 bg-gray-100">Nama Guru</TableHead>
-                          <TableHead className="border text-center w-20">Jam 1</TableHead>
-                          <TableHead className="border text-center w-20">Jam 2</TableHead>
-                          <TableHead className="border text-center w-20">Jam 3</TableHead>
-                          <TableHead className="border text-center w-20">Jam 4</TableHead>
-                          <TableHead className="border text-center w-20">Jam 5</TableHead>
-                          <TableHead className="border text-center w-20">Jam 6</TableHead>
-                          <TableHead className="border text-center w-20">Jam 7</TableHead>
-                          <TableHead className="border text-center w-20">Jam 8</TableHead>
-                          <TableHead className="border text-center w-20">Jam 9</TableHead>
+                          {Array.from({ length: selectedShiftJadwal === 'PAGI' ? MAX_JAM_PAGI : MAX_JAM_SIANG }, (_, i) => i + 1).map(jam => (
+                            <TableHead key={jam} className="border text-center w-20">Jam {jam}</TableHead>
+                          ))}
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -2700,6 +3762,7 @@ export default function Home() {
                             
                             // Filter kelas by selected shift
                             const kelasOptions = kelasList.filter(k => k.shift === selectedShiftJadwal);
+                            const maxJam = selectedShiftJadwal === 'PAGI' ? MAX_JAM_PAGI : MAX_JAM_SIANG;
                             
                             return (
                               <TableRow key={guruId} className="hover:bg-gray-50">
@@ -2707,7 +3770,7 @@ export default function Home() {
                                 <TableCell className="border font-medium sticky left-12 bg-white">
                                   {guru.nama} {guru.gelar}
                                 </TableCell>
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(jam => (
+                                {Array.from({ length: maxJam }, (_, i) => i + 1).map(jam => (
                                   <TableCell key={jam} className="border p-1">
                                     <Select
                                       value={jams[jam] || 'kosong'}
@@ -3035,23 +4098,24 @@ export default function Home() {
                     <p className="text-xs text-gray-500">Format: Kolom A = Nama, Kolom B = Kelas</p>
                   </div>
                   <ScrollArea className="h-64">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-10">
-                            <Checkbox
-                              checked={siswaList.length > 0 && selectedSiswaIds.size === siswaList.length}
-                              onCheckedChange={() => toggleSelectAllSiswa(siswaList)}
-                            />
-                          </TableHead>
-                          <TableHead>No</TableHead>
-                          <TableHead>Nama Siswa</TableHead>
-                          <TableHead>Kelas</TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {siswaList.map((siswa, idx) => (
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-10">
+                              <Checkbox
+                                checked={siswaList.length > 0 && selectedSiswaIds.size === siswaList.length}
+                                onCheckedChange={() => toggleSelectAllSiswa(siswaList)}
+                              />
+                            </TableHead>
+                            <TableHead>No</TableHead>
+                            <TableHead>Nama Siswa</TableHead>
+                            <TableHead>Kelas</TableHead>
+                            <TableHead></TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {siswaList.map((siswa, idx) => (
                           <TableRow key={siswa.id} className={selectedSiswaIds.has(siswa.id) ? 'bg-red-50' : ''}>
                             <TableCell>
                               <Checkbox
@@ -3090,6 +4154,7 @@ export default function Home() {
                         ))}
                       </TableBody>
                     </Table>
+                    </div>
                   </ScrollArea>
                 </CardContent>
               </Card>
@@ -3108,6 +4173,108 @@ export default function Home() {
                 Simpan Pengaturan
               </Button>
             </div>
+
+            {/* Logo Upload Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Logo Sekolah</CardTitle>
+                <CardDescription>Upload logo sekolah untuk ditampilkan di header dan dokumen cetak</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0">
+                    {pengaturanForm.logo ? (
+                      <div className="relative">
+                        <img 
+                          src={pengaturanForm.logo} 
+                          alt="Logo Sekolah" 
+                          className="w-32 h-32 object-contain border rounded-lg bg-gray-50"
+                        />
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          className="absolute -top-2 -right-2 h-6 w-6"
+                          onClick={async () => {
+                            try {
+                              const res = await fetch('/api/upload-logo', { method: 'DELETE' });
+                              if (res.ok) {
+                                setPengaturanForm({ ...pengaturanForm, logo: '' });
+                                alert('Logo berhasil dihapus!');
+                              }
+                            } catch (error) {
+                              alert('Gagal menghapus logo!');
+                            }
+                          }}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50">
+                        <div className="text-center text-gray-400">
+                          <ImageIcon className="w-8 h-8 mx-auto mb-1" />
+                          <span className="text-xs">No Logo</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <Label className="flex items-center gap-2 cursor-pointer bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors w-fit">
+                      <Upload className="w-4 h-4" />
+                      Upload Logo
+                      <Input
+                        type="file"
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+
+                          // Validate file size (max 2MB)
+                          if (file.size > 2 * 1024 * 1024) {
+                            alert('Ukuran file terlalu besar. Maksimal 2MB');
+                            return;
+                          }
+
+                          // Validate file type
+                          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                          if (!allowedTypes.includes(file.type)) {
+                            alert('Format file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP');
+                            return;
+                          }
+
+                          try {
+                            const formData = new FormData();
+                            formData.append('logo', file);
+
+                            const res = await fetch('/api/upload-logo', {
+                              method: 'POST',
+                              body: formData,
+                            });
+
+                            if (res.ok) {
+                              const data = await res.json();
+                              setPengaturanForm({ ...pengaturanForm, logo: data.logo });
+                              alert('Logo berhasil diupload!');
+                            } else {
+                              const error = await res.json();
+                              throw new Error(error.error || 'Gagal mengupload logo');
+                            }
+                          } catch (error) {
+                            alert(error instanceof Error ? error.message : 'Gagal mengupload logo!');
+                          }
+
+                          e.target.value = '';
+                        }}
+                      />
+                    </Label>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Format: JPG, PNG, GIF, WebP. Maksimal 2MB. Disarankan menggunakan logo dengan background transparan.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             <Card>
               <CardHeader>

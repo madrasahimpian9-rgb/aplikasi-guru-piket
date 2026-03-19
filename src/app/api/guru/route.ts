@@ -3,14 +3,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
+    // Don't include jadwal relations for better performance
+    // Jadwal is fetched separately when needed
     const guru = await db.guru.findMany({
-      include: {
-        jadwal: {
-          include: {
-            kelas: true,
-          },
-        },
-      },
       orderBy: { kode: 'asc' },
     });
     

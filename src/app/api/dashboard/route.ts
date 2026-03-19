@@ -10,57 +10,78 @@ export async function GET(request: Request) {
     const date = new Date(tanggal);
     const hariIni = HARI[date.getDay()];
     
-    // Get jadwal hari ini
-    const jadwalHariIni = await db.jadwal.findMany({
-      where: { hari: hariIni },
-      include: {
-        kelas: true,
-        guru: true,
-      },
-      orderBy: [
-        { jamKe: 'asc' },
-        { kelas: { nama: 'asc' } },
-      ],
-    });
-    
-    // Get kehadiran guru hari ini
-    const kehadiranGuru = await db.kehadiranGuru.findMany({
-      where: { tanggal: date },
-      include: {
-        jadwal: {
-          include: {
-            kelas: true,
-          },
+    // Run all independent queries in parallel for better performance
+    const [
+      jadwalHariIni,
+      kehadiranGuru,
+      kehadiranSiswa,
+      totalSiswa,
+      totalGuru,
+      totalKelas,
+      jadwalPiketHariIni,
+      kehadiranGuruPiket,
+      kelasList,
+    ] = await Promise.all([
+      // Get jadwal hari ini
+      db.jadwal.findMany({
+        where: { hari: hariIni },
+        include: {
+          kelas: true,
+          guru: true,
         },
-        guru: true,
-      },
-    });
-    
-    // Get kehadiran siswa hari ini
-    const kehadiranSiswa = await db.kehadiranSiswa.findMany({
-      where: { tanggal: date },
-      include: {
-        siswa: true,
-        kelas: true,
-      },
-    });
-    
-    // Get total siswa
-    const totalSiswa = await db.siswa.count();
-    
-    // Get total guru
-    const totalGuru = await db.guru.count();
-    
-    // Get total kelas
-    const totalKelas = await db.kelas.count();
-    
-    // Summary ketidakhadiran siswa per kelas
-    const kelasList = await db.kelas.findMany({
-      include: {
-        _count: { select: { siswa: true } },
-      },
-      orderBy: { nama: 'asc' },
-    });
+        orderBy: [
+          { jamKe: 'asc' },
+          { kelas: { nama: 'asc' } },
+        ],
+      }),
+      // Get kehadiran guru hari ini
+      db.kehadiranGuru.findMany({
+        where: { tanggal: date },
+        include: {
+          jadwal: {
+            include: {
+              kelas: true,
+            },
+          },
+          guru: true,
+        },
+      }),
+      // Get kehadiran siswa hari ini
+      db.kehadiranSiswa.findMany({
+        where: { tanggal: date },
+        include: {
+          siswa: true,
+          kelas: true,
+        },
+      }),
+      // Get total siswa
+      db.siswa.count(),
+      // Get total guru
+      db.guru.count(),
+      // Get total kelas
+      db.kelas.count(),
+      // Get guru piket hari ini (for both shifts)
+      db.jadwalPiket.findMany({
+        where: { hari: hariIni },
+        include: {
+          guru: true,
+        },
+      }),
+      // Get kehadiran guru piket hari ini
+      db.kehadiranGuruPiket.findMany({
+        where: { tanggal: date },
+        include: {
+          guru: true,
+        },
+      }),
+      // Get kelas list with student count
+      db.kelas.findMany({
+        include: {
+          _count: { select: { siswa: true } },
+        },
+        orderBy: { nama: 'asc' },
+      }),
+    ]);
     
     const ketidakhadiranPerKelas = kelasList.map(kelas => {
       const kelasKehadiran = kehadiranSiswa.filter(k => k.kelasId === kelas.id);
@@ -80,8 +101,9 @@ export async function GET(request: Request) {
     });
     
     // Summary guru hadir/tidak hadir
-    const guruHadir = kehadiranGuru.filter(k => k.status === 'HADIR').length;
+    // Default is HADIR, so count TIDAK_HADIR from records, and hadir = total jadwal - tidak hadir
     const guruTidakHadir = kehadiranGuru.filter(k => k.status === 'TIDAK_HADIR').length;
+    const guruHadir = jadwalHariIni.length - guruTidakHadir;
     
     // Guru yang mengajar hari ini (unique)
     const guruMengajarHariIni = [...new Set(jadwalHariIni.map(j => j.guruId))];
@@ -93,6 +115,8 @@ export async function GET(request: Request) {
       kehadiranGuru,
       kehadiranSiswa,
       ketidakhadiranPerKelas,
+      jadwalPiketHariIni,
+      kehadiranGuruPiket,
       summary: {
         totalSiswa,
         totalGuru,
